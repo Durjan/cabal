@@ -3,7 +3,7 @@
 
 @section('content')
 @component('common-components.breadcrumb')
-    @slot('pagetitle') UNINET @endslot
+    @slot('pagetitle') CABAL @endslot
     @slot('title') Dashboard @endslot
 @endcomponent 
 <div class="row">
