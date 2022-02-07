@@ -233,7 +233,7 @@ Gestión de Clientes
                                             </div>
             
                                         </div>
-            
+
                                         <div class="col-md-4">
             
                                             <div class="row">
@@ -738,6 +738,7 @@ Gestión de Clientes
                                                         </div>
                         
                                                     </div>
+
                                                     <div class="col-md-4">
                                                         <div class="row">
                                                             <div class="form-group row col-md-12">
@@ -764,7 +765,7 @@ Gestión de Clientes
                                                         </div>
                         
                                                     </div>
-
+                                                    
                                                     <div class="col-md-4">
                                                         <div class="row">
                                                             <div class="form-group row col-md-12">
@@ -834,7 +835,20 @@ Gestión de Clientes
                         
                                                     </div>
                                                     
-
+                                                    <div class="col-md-4">
+                                                        <div class="row">
+                                                            <div class="form-group row col-md-12">
+                                                                <label for="example-text-input" class="col-md-4 col-form-label">Tecnología *</label>
+                                                                <div class="col-md-8">
+                                                                    <select class="form-control" name="tecnologia" id="tecnologia" required>
+                                                                        <option value="" >Seleccionar...</option>
+                                                                        <option value="FTTH" >FTTH</option>
+                                                                        <option value="INALAMBRICO" >INALAMBRICO</option>
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
 
                                                 </div>
 

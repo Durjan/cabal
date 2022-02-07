@@ -922,6 +922,20 @@ Gestión de Clientes
                                                         </div>
                         
                                                     </div>
+                                                    <div class="col-md-4">
+                                                        <div class="row">
+                                                            <div class="form-group row col-md-12">
+                                                                <label for="example-text-input" class="col-md-4 col-form-label">Tecnología *</label>
+                                                                <div class="col-md-8">
+                                                                    <select class="form-control" name="tecnologia" id="tecnologia" required>
+                                                                        <option value="" >Seleccionar...</option>
+                                                                        <option value="FTTH" @if (isset($internet[0]->tecnologia)==1) @if($internet[0]->tecnologia=='FTTH') selected @endif @endif>FTTH</option>
+                                                                        <option value="INALAMBRICO" @if (isset($internet[0]->tecnologia)==1) @if($internet[0]->tecnologia=='INALAMBRICO') selected @endif @endif>INALAMBRICO</option>
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                                     
 
 

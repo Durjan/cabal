@@ -352,6 +352,7 @@ class ClientesController extends Controller
             $internet->recepcion = $request->recepcion;
             $internet->trasmision = $request->trasmision;
             $internet->ip = $request->ip;
+            $internet->tecnologia = $request->tecnologia;
             $internet->identificador = 1;
             $internet->activo = 1;
             $internet->save();
@@ -453,6 +454,7 @@ class ClientesController extends Controller
             $internet->recepcion = $request->recepcion;
             $internet->trasmision = $request->trasmision;
             $internet->ip = $request->ip;
+            $internet->tecnologia = $request->tecnologia;
             $internet->identificador = 1;
             $internet->activo = 1;
             $internet->save();
@@ -632,6 +634,7 @@ class ClientesController extends Controller
                     'recepcion' => $request->recepcion,
                     'trasmision' => $request->trasmision,
                     'ip' => $request->ip,
+                    'tecnologia' => $request->tecnologia,
 
                 ]);
 
@@ -678,6 +681,7 @@ class ClientesController extends Controller
                 $internet->recepcion = $request->recepcion;
                 $internet->trasmision = $request->trasmision;
                 $internet->ip = $request->ip;
+                $internet->tecnologia = $request->tecnologia;
                 $internet->identificador = 1;
                 $internet->save();
 

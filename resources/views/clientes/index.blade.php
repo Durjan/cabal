@@ -337,7 +337,10 @@
                                                             <th>Ip:</th>
                                                             <td id="ip"></td>
                                                         </tr>
-                                                        
+                                                        <tr>
+                                                            <th>Tecnología:</th>
+                                                            <td id="tecnologia"></td>
+                                                        </tr>
                                         
                                                     </tbody>
                                                 </table>
@@ -634,6 +637,7 @@
                 $("#recepcion").text(validacion(data[0].recepcion,1));
                 $("#trasmision").text(validacion(data[0].trasmision,1));
                 $("#ip").text(validacion(data[0].ip,1));
+                $("#tecnologia").text(validacion(data[0].tecnologia,1));
                 
 
 
