@@ -76,11 +76,11 @@
                                         </span>
                                     </div>
                                     <div class="col-lg-5">
-                                        <h4>
-                                            <strong>TECNNITEL S.A. DE C.V</strong>
-                                        </h4>
+                                        <h5>
+                                            <strong>REDES LITORALES S.A. DE C.V</strong>
+                                        </h5>
                                         <p>
-                                            <strong>Col. Cuscatlan Block C, #16 Apopa San salvador</strong>
+                                            <strong>Av. Las Palmeras, Casa 2, Lot CerroMar, Km 43.5 Carr. Litoral Tamanique, La Libertad</strong>
                                         </p>
                                     </div>
                                     <div class="col-lg-3">

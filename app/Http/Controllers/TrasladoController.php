@@ -370,7 +370,7 @@ class TrasladoController extends Controller
         
         $fpdf->AliasNbPages();
         $fpdf->AddPage();
-        $fpdf->SetTitle('TRASLADO   | UNINET');
+        $fpdf->SetTitle('TRASLADO   | CABAL');
 
         $fpdf->SetXY(175,22);
         $fpdf->SetFont('Arial','',15);

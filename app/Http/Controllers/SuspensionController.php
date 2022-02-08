@@ -418,7 +418,7 @@ class SuspensionController extends Controller
         
         $fpdf->AliasNbPages();
         $fpdf->AddPage();
-        $fpdf->SetTitle('SUSPENSION   | UNINET');
+        $fpdf->SetTitle('SUSPENSION   | CABAL');
 
         $fpdf->SetXY(175,22);
         $fpdf->SetFont('Arial','',15);

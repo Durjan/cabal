@@ -83,7 +83,7 @@ class ReportesController extends Controller
         $fpdf = new FpdfReportes('P','mm', 'Letter');
         $fpdf->AliasNbPages();
         $fpdf->AddPage();
-        $fpdf->SetTitle('CLIENTES | UNINET');
+        $fpdf->SetTitle('CLIENTES | CABAL');
 
         $fpdf->SetXY(15,29);
         $fpdf->SetFont('Arial','',9);
@@ -146,7 +146,7 @@ class ReportesController extends Controller
         $fpdf = new FpdfReportes('P','mm', 'Letter');
         $fpdf->AliasNbPages();
         $fpdf->AddPage();
-        $fpdf->SetTitle('CLIENTES | UNINET');
+        $fpdf->SetTitle('CLIENTES | CABAL');
 
         $fpdf->SetXY(15,29);
         $fpdf->SetFont('Arial','',9);
@@ -238,7 +238,7 @@ class ReportesController extends Controller
         $fpdf = new FpdfReportes('P','mm', 'Letter');
         $fpdf->AliasNbPages();
         $fpdf->AddPage();
-        $fpdf->SetTitle('PAGO SERVICIOS | UNINET');
+        $fpdf->SetTitle('PAGO SERVICIOS | CABAL');
 
         $fpdf->SetXY(15,29);
         $fpdf->SetFont('Arial','',9);
@@ -309,7 +309,7 @@ class ReportesController extends Controller
         $fpdf = new FpdfReportes('P','mm', 'Letter');
         $fpdf->AliasNbPages();
         $fpdf->AddPage();
-        $fpdf->SetTitle('CONTRATOS A VENCER | UNINET');
+        $fpdf->SetTitle('CONTRATOS A VENCER | CABAL');
         
         $fpdf->SetXY(15,29);
         $fpdf->SetFont('Arial','',9);
@@ -340,7 +340,7 @@ class ReportesController extends Controller
         $fpdf = new FpdfReportes('P','mm', 'Letter');
         $fpdf->AliasNbPages();
         $fpdf->AddPage();
-        $fpdf->SetTitle('FACTURAS | UNINET');
+        $fpdf->SetTitle('FACTURAS | CABAL');
 
         $fpdf->SetXY(15,29);
         $fpdf->SetFont('Arial','',9);
@@ -429,7 +429,7 @@ class ReportesController extends Controller
         $fpdf = new FpdfReportes('P','mm', 'Letter');
         $fpdf->AliasNbPages();
         $fpdf->AddPage();
-        $fpdf->SetTitle('ORDENES | UNINET');
+        $fpdf->SetTitle('ORDENES | CABAL');
 
         $fpdf->SetXY(15,29);
         $fpdf->SetFont('Arial','',9);

@@ -18,7 +18,7 @@ class FpdfClass extends Fpdf{
             // Movernos a la derecha
             $this->SetXY(80,10);
             // Título
-            $this->Cell(30,10,'TECNNITEL S.A de C.V.');
+            $this->Cell(25,10,'REDES LITORALES S.A de C.V.');
             $this->SetXY(81,16);
             $this->SetFont('Arial','',12);
             $this->Cell(30,10,'SERVICIO DE TELECOMUNICACIONES');

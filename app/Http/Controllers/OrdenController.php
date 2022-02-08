@@ -399,7 +399,7 @@ class OrdenController extends Controller
         
         $fpdf->AliasNbPages();
         $fpdf->AddPage();
-        $fpdf->SetTitle('ORDEN   | UNINET');
+        $fpdf->SetTitle('ORDEN   | CABAL');
 
         $fpdf->SetXY(175,22);
         $fpdf->SetFont('Arial','',15);

@@ -431,7 +431,7 @@ class ReconexionController extends Controller
             
             $fpdf->AliasNbPages();
             $fpdf->AddPage();
-            $fpdf->SetTitle('RECONEXION   | UNINET');
+            $fpdf->SetTitle('RECONEXION   | CABAL');
     
             $fpdf->SetXY(175,22);
             $fpdf->SetFont('Arial','',15);
