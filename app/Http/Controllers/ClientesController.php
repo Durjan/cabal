@@ -1250,44 +1250,79 @@ class ClientesController extends Controller
         
         $fpdf->AliasNbPages();
         $fpdf->AddPage();
-        $fpdf->SetTitle('CONTRATOS | UNINET');
+        $fpdf->SetTitle('CONTRATOS | CABAL');
 
-        $fpdf->SetXY(175,22);
-        $fpdf->SetFont('Arial','',15);
-        $fpdf->SetTextColor(194,8,8);
-        $fpdf->Cell(30,10,$contrato_internet[0]->numero_contrato);
         $fpdf->SetTextColor(0,0,0);
-        $fpdf->SetFont('Arial','B',12);
-        $fpdf->SetXY(65,26);
-        $fpdf->cell(30,10,utf8_decode('CONTRATO DE SERVICIO DE INTERNET'));
-        //$contrato_internet[0]->numero_contrato
-        $fpdf->SetXY(165,22);
-        $fpdf->SetFont('Arial','',14);
-        $fpdf->SetTextColor(194,8,8);
-        $fpdf->Cell(30,10,utf8_decode('Nº.'));
-        $fpdf->SetTextColor(0,0,0);
+        $fpdf->SetFont('Arial','',10);
+        $fpdf->SetXY(66,10);
+        $fpdf->cell(33,5,utf8_decode('Contrato Nº'),0,0,'R');
+        $fpdf->cell(50,5,$contrato_internet[0]->numero_contrato,1);
+        $fpdf->SetXY(66,16);
+        $fpdf->cell(33,5,utf8_decode('Cod. De Cliente'),0,0,'R');
+        $fpdf->cell(50,5,$cliente->codigo,1);
+        $fpdf->cell(32,5,'Cliente Nuevo',0,0,'R');
+        $fpdf->cell(7,5,'Si',0);
+        $fpdf->SetFont('ZapfDingbats');
+        $fpdf->cell(5,5,chr(52),1,0,'C');
+        $fpdf->SetFont('Arial','',12);
+        $fpdf->cell(7,5,'No',0);
+        $fpdf->SetFont('ZapfDingbats');
+        $fpdf->cell(5,5,chr(52),1,0,'C');
 
-        $fpdf->SetFont('Arial','',11);
+        $fpdf->SetXY(95,26);
+        $fpdf->SetFont('Arial','',9);
+        $fpdf->cell(7,5,'Nombre del cliente',0);
         
-        $fpdf->SetXY(15,30);
-        $fpdf->cell(40,10,utf8_decode('Servicio No: '.$contrato_internet[0]->numero_contrato));
-        $fpdf->SetXY(38,30);
-        $fpdf->cell(40,10,'_________');
+        //$contrato_internet[0]->numero_contrato
+        $fpdf->SetXY(17,30);
+        $fpdf->SetFont('Arial','',11);
+        //$fpdf->SetTextColor(194,8,8);color rojo
+        $fpdf->Cell(185,7,utf8_decode($cliente->nombre),1,0,'C');
 
-        $fpdf->SetXY(156,30);
-        if(isset($contrato_internet[0]->fecha_instalacion)==1){
-            $fecha_instalacion = $contrato_internet[0]->fecha_instalacion->format('d/m/Y');
-        }else{
-            $fecha_instalacion ="";
-        }
-        $fpdf->cell(30,10,utf8_decode('Fecha: '.$fecha_instalacion));
-        $fpdf->SetXY(169,30);
-        $fpdf->cell(40,10,'______________');
-
-        $fpdf->SetXY(15,36);
-        $fpdf->cell(40,10,utf8_decode('NOMBRE COMPLETO: '.$cliente->nombre));
-        $fpdf->SetXY(57,36);
-        $fpdf->cell(40,10,'__________________________________________________________________');
+        $fpdf->SetXY(17,37);
+        $fpdf->Cell(20,5,utf8_decode('DUI'),1,0,'C');
+        $fpdf->SetFont('ZapfDingbats');
+        $fpdf->cell(5,5,chr(52),1,1,'C');
+        $fpdf->SetFont('Arial','',11);
+        $fpdf->SetXY(17,42);
+        $fpdf->Cell(20,5,utf8_decode('Pasaporte'),1,0,'C');
+        //$fpdf->SetFont('ZapfDingbats');
+        $fpdf->cell(5,5,'',1,0,'C');
+        $fpdf->SetFont('Arial','',11);
+        $fpdf->SetXY(42,37);
+        $fpdf->Cell(30,10,$cliente->dui,1,0,'C');
+        
+        $fpdf->SetXY(72,40);
+        $fpdf->Cell(10,5,utf8_decode('NIT'),1,0,'C');
+        $fpdf->Cell(60,5,$cliente->nit,1,1,'C');
+        
+        $fpdf->SetXY(17,48);
+        $fpdf->Cell(20,5,'Masculino',1,0,'L');
+        $fpdf->SetFont('ZapfDingbats');
+        $fpdf->cell(5,5,chr(52),1,0,'C');
+        $fpdf->SetFont('Arial','',11);
+        $fpdf->Cell(20,5,'Femenino',1,0,'L');
+        $fpdf->SetFont('ZapfDingbats');
+        $fpdf->cell(5,5,chr(52),1,0,'C');
+        $fpdf->SetFont('Arial','',11);
+        $fpdf->Cell(30,5,'Soltero/a',1,0,'R');
+        $fpdf->SetFont('ZapfDingbats');
+        $fpdf->cell(5,5,chr(52),1,0,'C');
+        $fpdf->SetFont('Arial','',11);
+        $fpdf->Cell(20,5,'Casado/a',1,0,'R');
+        $fpdf->SetFont('ZapfDingbats');
+        $fpdf->cell(5,5,chr(52),1,0,'C');
+        $fpdf->SetFont('Arial','',11);
+        $fpdf->Cell(20,5,'Viudo/a',1,0,'R');
+        $fpdf->SetFont('ZapfDingbats');
+        $fpdf->cell(5,5,chr(52),1,0,'C');
+        $fpdf->SetFont('Arial','',11);
+        $fpdf->Cell(55,5,'Fecha de Nacimiento',1,2,'R');
+        $fpdf->Cell(20,5,'',0,0,'R');
+        $fpdf->Cell(25,5,'05-09-2022',1,0,'R');
+        
+        /*
+        $fpdf->SetFont('Arial','',11);
 
         $fpdf->SetXY(15,42);
         $fpdf->cell(40,10,utf8_decode('DUI: '.$cliente->dui));
@@ -1307,7 +1342,7 @@ class ClientesController extends Controller
         $fpdf->SetXY(15,48);
         $fpdf->cell(40,10,utf8_decode('DIRRECCIÓN:'));
         $fpdf->SetXY(44,50);
-        $fpdf->SetFont('Arial','',11);
+        $fpdf->SetFont('Arial','',11);*/
         if($cliente->id_municipio!=0){
 
             $direccion = $cliente->dirreccion.', '.$cliente->get_municipio->nombre.', '.$cliente->get_municipio->get_departamento->nombre;
@@ -1315,304 +1350,188 @@ class ClientesController extends Controller
             $direccion = $cliente->dirreccion;
         }
         $direccion = substr($direccion,0,172);
-        $fpdf->MultiCell(158,5,utf8_decode($direccion));
-        $fpdf->SetXY(42,48);
+        //$fpdf->MultiCell(158,5,utf8_decode($direccion));
         $fpdf->SetFont('Arial','',11);
-        $fpdf->cell(40,10,'_________________________________________________________________________');
-        $fpdf->SetXY(42,53);
-        $fpdf->cell(40,10,'_________________________________________________________________________');
+        $fpdf->SetXY(17,58);
+        $fpdf->cell(135,5,utf8_decode('Dirección domicilio'),1,0);
+        $fpdf->cell(57,5,utf8_decode('Teléfonos'),1,1,'C');
+        $fpdf->SetXY(17,63);
+        if($cliente->id_municipio!=0){
 
-
-        $fpdf->SetXY(15,59);
-        $fpdf->cell(40,10,utf8_decode('CORREO ELECTRONICO: '.$cliente->email));
-        $fpdf->SetXY(62,59);
-        $fpdf->cell(40,10,'________________________________________________________________');
-
-        $fpdf->SetFont('Arial','B',12);
-        $fpdf->SetXY(89,65);
-        $fpdf->cell(30,10,utf8_decode('OCUPACIÓN'));
-
-        $fpdf->SetFont('Arial','',11);
-
-        $fpdf->SetXY(15,71);
-        $fpdf->cell(30,10,utf8_decode('EMPLEADO'));
-        $fpdf->SetXY(42,73);
-        $fpdf->SetFont('ZapfDingbats');
-        if($cliente->ocupacion==1){
-
-            $fpdf->cell(10,5,chr(52),1,1,'C');
+            $direccion = $cliente->dirreccion.', '.$cliente->get_municipio->nombre.', '.$cliente->get_municipio->get_departamento->nombre;
         }else{
-            $fpdf->cell(10,5,'',1,1,'C');
+            $direccion = $cliente->dirreccion;
         }
+        $direccion = substr($direccion,0,172);
+        $fpdf->cell(135,5,utf8_decode($direccion),1,0);
+        $fpdf->cell(20,5,'Fijo',1,0,'C');
+        $fpdf->cell(37,5,'2635-5897',1,1,'L');
+        $fpdf->SetXY(17,72);
+        $fpdf->cell(135,5,utf8_decode('Dirección de trabajo'),1,0);
+        $fpdf->cell(20,5,'Personal',1,0,'C');
+        $fpdf->cell(37,5,'7743-8467',1,0,'L');
+        $fpdf->SetXY(17,77);
+        $fpdf->cell(135,5,utf8_decode('Canton las Trancas lot el Pozo Ozatlan Usulutan'),1,0);
+        //$fpdf->TextWithDirection(110,50,'Text on Vertical','L');
+        //$fpdf->SetFillColor(255, 215, 0);
+        $fpdf->Rect(7, 26, 202 , 60, '');
+        
+        //----------------SEGUNDO CUADRO------------------------------------------------
+        $fpdf->SetXY(17,90);
+        $fpdf->SetFont('Arial','',9);
+        $fpdf->cell(30,5,utf8_decode('Dirección de cobro'),1,0);
+        $fpdf->cell(35,5,utf8_decode('La misma de Domicilio'),1);
+        $fpdf->SetFont('ZapfDingbats');
+        $fpdf->cell(5,5,chr(52),1,0,'C');
+        $fpdf->SetFont('Arial','',9);
+        $fpdf->cell(35,5,utf8_decode('La misma de Trabajo'),1);
+        $fpdf->SetFont('ZapfDingbats');
+        $fpdf->cell(5,5,chr(52),1,0,'C');
 
+        
+        $fpdf->SetFont('Arial','',11);
+        $fpdf->SetXY(17,96);
+        $fpdf->cell(135,5,utf8_decode('Otra:'),1,0);
+        $fpdf->cell(57,5,utf8_decode('WhatsApp'),1,1,'C');
+        $fpdf->SetXY(17,101);
+        $fpdf->cell(135,5,utf8_decode('Canton las Trancas lot el Pozo Ozatlan Usulutan'),1,0);
+        $fpdf->cell(20,5,'',1,0,'C');
+        $fpdf->cell(37,5,'2635-5897',1,1,'L');
+        $fpdf->SetXY(17,108);
+        $fpdf->cell(20,5,utf8_decode('Email:'),1,0);
+        $fpdf->cell(115,5,utf8_decode(''),1,0);
+        $fpdf->cell(20,5,'',1,0,'C');
+        $fpdf->cell(37,5,'Zona',1,1,'L');
+        $fpdf->SetFont('Arial','',10);
+        $fpdf->SetXY(17,113);
+        $fpdf->Multicell(135,5,utf8_decode('El cliente autoriza la entrega de su factura en formato electrónico (ecofactura) por el siguiente medio: Email proporcionado por este formulario. Una copia de las condiciones de contratación serán enviadas por este mismo medio.'),1);
+        $fpdf->SetFont('Arial','',11);
+        $fpdf->SetXY(169,115);
+        $fpdf->cell(40,5,'Tamanique',1,0,'L');
+        $fpdf->SetXY(17,130);
+        $fpdf->cell(35,5,'Credito Fiscal',1);
+        $fpdf->SetFont('ZapfDingbats');
+        $fpdf->cell(5,5,chr(52),1,0,'C');
         $fpdf->SetFont('Arial','',12);
-
-        $fpdf->SetXY(57,71);
-        $fpdf->cell(30,10,utf8_decode('COMERCIANTE'));
-        $fpdf->SetXY(92,73);
+        $fpdf->cell(35,5,'Consumidor Final',1);
         $fpdf->SetFont('ZapfDingbats');
-        if($cliente->ocupacion==2){
-            
-            $fpdf->cell(10,5,chr(52),1,1,'C');
-        }else{
-            $fpdf->cell(10,5,'',1,1,'C');
+        $fpdf->cell(5,5,chr(52),1,1,'C');
+        $fpdf->SetFont('Arial','',10);
+        $fpdf->SetXY(19,139);
+        $fpdf->cell(80,5,utf8_decode('Persona Jurídica - Razón/Denominación'),1,0);
+        $fpdf->cell(105,5,utf8_decode(''),1,1);
+        $fpdf->SetXY(19,144);
+        $fpdf->cell(50,5,utf8_decode('Número de Registro'),1);
+        $fpdf->cell(25,5,utf8_decode('777777-7'),1,1);
+        $fpdf->SetXY(19,149);
+        $fpdf->cell(40,5,utf8_decode('NIT de Comercio'),1);
+        $fpdf->cell(40,5,utf8_decode('7777-777777-777-7'),1,1);
+        $fpdf->SetXY(19,157);
+        $fpdf->cell(40,5,utf8_decode('Giro'),1,0);
+        $fpdf->cell(145,5,utf8_decode(''),1,1);
+        $fpdf->Rect(17, 137, 190 , 26, '');
+        $fpdf->Rect(7, 88, 202 , 77, '');
+        //----------------------------------------------------------------
+        $fpdf->SetFont('Arial','',8);
+        $fpdf->SetXY(7,167);
+        $fpdf->MultiCell(202,5,utf8_decode('Declaro que mi información personal es cierta y autorizo a las empresas a comprobar su autenticidad, previo a dar trámite a la solicitud de los servicios. Acepto que la documentación donde conste la información proporcionada para efectos de este contrato, será resguardada por la empresa. Doy fe de lo establecido en el presente formulario y anexos. Confirmo que he leído y entiendo el contrato y las condiciones de la contratación, las cuales fueron presentadas a mi persona por el personal de la empresa. Ratifico el contenido del mismo y firmo.'),1);
 
-        }
+        $fpdf->SetFont('Arial','',9);
+        $fpdf->SetXY(7,190);
+        $fpdf->cell(42,5,'Firma del Vendedor',1,0,'C');
+        $fpdf->Rect(7, 190, 42 , 17, '');
+        $fpdf->SetFont('Arial','',8);
+        $fpdf->SetXY(49,190);
+        $fpdf->cell(110,5,'Nombre del Vendedor',0,0,'L');
+        $fpdf->Rect(49, 190, 110 , 8, '');
+        $fpdf->cell(53,5,utf8_decode('Código del Vendedor'),0,0,'C');
+        $fpdf->SetXY(49,198);
+        $fpdf->cell(110,5,'Lugar',0,0,'L');
+        $fpdf->Rect(49, 198, 110 , 9, '');//Lugar
+        $fpdf->Rect(159, 190, 50 , 8, '');//codigo de vendedor
+        $fpdf->Rect(159, 198, 50 , 9, '');//fecha 
+        $fpdf->cell(53,5,utf8_decode('Fecha'),0,1,'C');
+        $fpdf->SetXY(7,207);
+        $fpdf->cell(35,5,utf8_decode('Velocidades'),1,0,'C');
+        $fpdf->cell(35,5,utf8_decode('Plazo de contrato'),1,0,'C');
+        $fpdf->Rect(7, 207, 35 , 16, '');//cuadro de velocidades
+        $fpdf->SetFont('Arial','',6);
+        $fpdf->SetXY(7,220);
+        $fpdf->cell(17,3,utf8_decode('Bajada'),1,0,'C');
+        $fpdf->cell(18,3,utf8_decode('subida'),1,0,'C');
+        $fpdf->cell(35,3,utf8_decode('Meses'),1,0,'C');
+        $fpdf->Rect(42, 207, 35 , 16, '');//cuadro plazo de contrato
+        $fpdf->SetXY(79,210);
+        $fpdf->MultiCell(35,4,utf8_decode('Total de Servicios Mensuales Servicios Residenciales.'),1,'C');
+        $fpdf->Rect(77, 207, 39 , 16, '');//cuadro de servicios mensuales
+        $fpdf->SetXY(116,220);
+        $fpdf->cell(32,3,utf8_decode('(IVA incluido)'),1,0,'C');
+        $fpdf->Rect(116, 207, 32 , 16, '');//cuadro de iva incluido
+        $fpdf->Rect(148, 207, 32 , 16, '');//recargo
+        $fpdf->SetXY(148,208);
+        $fpdf->SetFont('Arial','',8);
+        $fpdf->MultiCell(32,4,utf8_decode('Cobro por pago tardío                $2.99                Por servicio'),1,'C');
+        $fpdf->SetFont('Arial','',6);
+        $fpdf->SetXY(180,207);
+        $fpdf->cell(29,3,utf8_decode('Firma de cliente'),1,0,'C');
+        $fpdf->Rect(180, 207, 29 , 16, '');//cuadro de firma de cliente
 
-        $fpdf->SetFont('Arial','',12);
-
-        $fpdf->SetXY(107,71);
-        $fpdf->cell(30,10,utf8_decode('INDEPENDIENTE'));
-        $fpdf->SetXY(145,73);
-        $fpdf->SetFont('ZapfDingbats');
-        if($cliente->ocupacion==3){
-
-            $fpdf->cell(10,5,chr(52),1,1,'C');
-        }else{
-
-            $fpdf->cell(10,5,'',1,1,'C');
-
-        }
-
-        $fpdf->SetFont('Arial','',12);
-
-        $fpdf->SetXY(160,71);
-        $fpdf->cell(30,10,utf8_decode('OTROS'));
-        $fpdf->SetXY(178,73);
-        $fpdf->SetFont('ZapfDingbats');
-        if($cliente->ocupacion==4){
-            $fpdf->cell(10,5,chr(52),1,1,'C');
-            
-        }else{
-            $fpdf->cell(10,5,'',1,1,'C');
-
-        }
-
-        $fpdf->SetFont('Arial','',11);
-
-        $fpdf->SetXY(15,77);
-        $fpdf->cell(30,10,utf8_decode('CONDICIÓN ACTUAL DEL LUGAR DE LA PRESTACIÓN DEL SERVICIO'));
-
-        $fpdf->SetFont('Arial','',11);
-
-        $fpdf->SetXY(15,83);
-        $fpdf->cell(30,10,utf8_decode('CASA PROPIA'));
-        $fpdf->SetXY(47,85);
-        $fpdf->SetFont('ZapfDingbats');
+        $fpdf->SetFont('Arial','B',10);
+        $fpdf->SetXY(7,225);
+        $fpdf->cell(135,5,utf8_decode('PAGARE SIN PROTESTO'),1,0,'L');
+        $fpdf->cell(20,5,utf8_decode('POR US$'),1,0,'L');
+        $fpdf->cell(40,5,utf8_decode('$460'),1,1,'L');
+        $fpdf->SetXY(7,230);
+        $fpdf->SetFont('Arial','',8);
+        $fpdf->cell(195,5,utf8_decode('                                                                                                      (Ciudad),                             de                                                           de 2021'),1,1,'L');
+        $fpdf->SetXY(7,235);
+        $fpdf->cell(195,5,utf8_decode('de_______________________de 20 _______ la cantidad de _____________________________________ DÓLARES DE LOS ESTADOS UNIDOS DE        '),1,1,'L');        
+        $fpdf->SetXY(7,240);
+        $fpdf->cell(195,5,utf8_decode('AMÉRICA, más el interés convencional del UNO PUNTO CERO CERO por ciento mensual, calculados a partir de la fecha de suscripción del presente'),1,1,'L');        
+        $fpdf->SetXY(7,245);
+        $fpdf->cell(195,5,utf8_decode('documento, pagaré(mos) además a partir de esta última fecha, intereses moratorios sobre el saldo de capital de mora.'),1,1,'L');
+        $fpdf->SetXY(7,254);
+        $fpdf->SetFont('Arial','B',10);
+        $fpdf->cell(120,5,'Firma del Suscriptor:_________________________',1,0,'L');
+        $fpdf->cell(75,5,'Firma del Avalista:_____________________',1,1,'L');
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        /*
         if($cliente->condicion_lugar==1){
             $fpdf->cell(10,5,chr(52),1,1,'C');
             
         }else{
             $fpdf->cell(10,5,'',1,1,'C');
 
-        }
-
-        $fpdf->SetFont('Arial','',11);
-
-        $fpdf->SetXY(60,83);
-        $fpdf->cell(30,10,utf8_decode('ALQUILADA'));
-        $fpdf->SetXY(87,85);
-        $fpdf->SetFont('ZapfDingbats');
-        if($cliente->condicion_lugar==2){
-            $fpdf->cell(10,5,chr(52),1,1,'C');
-            
-        }else{
-            $fpdf->cell(10,5,'',1,1,'C');
-
-        }
-
-        $fpdf->SetFont('Arial','',11);
-
-        $fpdf->SetXY(100,83);
-        $fpdf->cell(30,10,utf8_decode('OTROS'));
-        $fpdf->SetXY(119,85);
-        $fpdf->SetFont('ZapfDingbats');
-        if($cliente->condicion_lugar==3){
-            $fpdf->cell(10,5,chr(52),1,1,'C');
-            
-        }else{
-            $fpdf->cell(10,5,'',1,1,'C');
-
-        }
-
-        $fpdf->SetFont('Arial','',11);
-
-        $fpdf->SetXY(15,89);
-        $fpdf->cell(40,10,utf8_decode('NOMBRE DEL DUEÑO DEL INMUEBLE: '.$cliente->nombre_dueno));
-        $fpdf->SetXY(88,89);
-        $fpdf->cell(40,10,'___________________________________________________');
-
-        $fpdf->SetFont('Arial','B',12);
-        $fpdf->SetXY(70,95);
-        $fpdf->cell(30,10,utf8_decode('SERVICIOS CONTRATADOS'));
-
-        $fpdf->SetFont('Arial','',11);
-
-        $fpdf->SetXY(15,101);
-        $fpdf->cell(40,10,utf8_decode('VELOCIDAD: '.$contrato_internet[0]->velocidad));
-        $fpdf->SetXY(39,101);
-        $fpdf->cell(40,10,'_____________ INTERNET');
-
-        $fpdf->SetXY(95,103);
-        $fpdf->SetFont('ZapfDingbats');
-        $fpdf->cell(10,5,chr(52),1,1,'C');
-
-        $fpdf->SetFont('Arial','',11);
-        $fpdf->SetXY(112,101);
-        $fpdf->cell(40,10,'$ '.$contrato_internet[0]->cuota_mensual);
-        $fpdf->SetXY(114,101);
-        $fpdf->cell(40,10,'_______ TOTAL MENSUAL $ '.$contrato_internet[0]->cuota_mensual);
-        $fpdf->SetXY(165,101);
-        $fpdf->cell(40,10,'_______');
-
-        $fpdf->SetXY(15,107);
-        $fpdf->cell(40,10,utf8_decode('COSTOS POR INSTALACIÓN $ '.$contrato_internet[0]->costo_instalacion));
-        $fpdf->SetXY(68,107);
-        $fpdf->cell(40,10,'__________ (PRECIO INCLUYE IVA)');
-
-        $fpdf->SetXY(15,113);
+        }*/
+    
+        /*$fpdf->SetXY(15,113);
         if(isset($contrato_internet[0]->contrato_vence)==1){
             $contrato_vence = $contrato_internet[0]->contrato_vence->format('d/m/Y');
         }else{
             $contrato_vence ="";
-        }
-        $fpdf->cell(40,10,utf8_decode('FECHA INICIO DE CONTRATO: '.$fecha_instalacion.'    FINALIZACIÓN DEL CONTRATO: '.$contrato_vence));
-        $fpdf->SetXY(72,113);
-        $fpdf->cell(40,10,'___________                                                        __________');
-
-        $fpdf->SetFont('Arial','',10);
-        $fpdf->SetXY(15,121);
-        $fpdf->MultiCell(186,5,utf8_decode('El presente contrato es una plaza de '.$contrato_internet[0]->periodo.' meses a partir de la fecha de instalación del servicio por escrito y pudiendo prorrogarse con el consentimiento del mismo. Si el cliente desea dar por finalizada la relación del servicio debe comunicarse a TECNNITEL con quince días de anticipación.'));
-        $fpdf->SetFont('Arial','B',11);
-        $fpdf->SetXY(60,135);
-        $fpdf->cell(40,10,utf8_decode('PENALIDAD POR TERMINACIÓN ANTICIPADA'));
-        $fpdf->SetFont('Arial','',10);
-        $fpdf->SetXY(15,142);
-        $fpdf->MultiCell(186,5,utf8_decode('Si el cliente desea dar por terminado el presente contrato de este servicio de manera anticipada por voluntad propia, se verá en la obligación de cancelar todos los meses pendientes del plazo contratado por el mismo valor y hacer la entrega de los aparatos y accesorios que fueron entregados al cliente en COMODATO que TECNNITEL ha proporcionado para la prestación de estos servicios. La protección de estos componentes queda bajo la responsabilidad del cliente quien responderá por daños o extravíos de los equipos entregados. En caso de daño o extravío el cliente deberá cancelar su valor económico a TECNNITEL. Si hubiere un elemento con falla por causa de fabricación: TECNNITEL lo reemplazará previa recuperación del elemento dañado.'));
-        
-        $fpdf->SetFont('Arial','',11);
-
-        $fpdf->SetXY(55,176);
-        $fpdf->cell(30,10,utf8_decode('ONU'));
-        $fpdf->SetXY(69,178);
-        $fpdf->SetFont('ZapfDingbats');
+        }*/
+        //$fpdf->cell(40,10,utf8_decode('FECHA INICIO DE CONTRATO: '.$fecha_instalacion.'    FINALIZACIÓN DEL CONTRATO: '.$contrato_vence));
+        /*
         if($contrato_internet[0]->onu==1){
             $fpdf->cell(10,5,chr(52),1,1,'C');
             
         }else{
             $fpdf->cell(10,5,'',1,1,'C');
 
-        }
+        }*/
 
-        $fpdf->SetFont('Arial','',12);
-
-        $fpdf->SetXY(126,176);
-        $fpdf->cell(30,10,utf8_decode('ONU + CATV'));
-        $fpdf->SetXY(155,178);
-        $fpdf->SetFont('ZapfDingbats');
-        if($contrato_internet[0]->onu_wifi==1){
-            $fpdf->cell(10,5,chr(52),1,1,'C');
-            
-        }else{
-            $fpdf->cell(10,5,'',1,1,'C');
-
-        }
-
-        $fpdf->SetFont('Arial','',12);
-
-        $fpdf->SetXY(33,182);
-        $fpdf->cell(30,10,utf8_decode('CABLE DE RED'));
-        $fpdf->SetXY(69,184);
-        $fpdf->SetFont('ZapfDingbats');
-        if($contrato_internet[0]->cable_red==1){
-            $fpdf->cell(10,5,chr(52),1,1,'C');
-            
-        }else{
-            $fpdf->cell(10,5,'',1,1,'C');
-
-        }
-
-        $fpdf->SetFont('Arial','',12);
-
-        $fpdf->SetXY(133,182);
-        $fpdf->cell(30,10,utf8_decode('ROUTER'));
-        $fpdf->SetXY(155,184);
-        $fpdf->SetFont('ZapfDingbats');
-        if($contrato_internet[0]->router==1){
-            $fpdf->cell(10,5,chr(52),1,1,'C');
-            
-        }else{
-            $fpdf->cell(10,5,'',1,1,'C');
-
-        }
-
-        $fpdf->SetFont('Arial','',10);
-        $fpdf->SetXY(15,190);
-        $fpdf->MultiCell(186,5,utf8_decode('El presente contrato de servicio contiene los términos y las condiciones de contratación de TECNNITEL los cuales he recibido de parte del mismo en este acto, y constituyen los aplicables de manera general a la prestación de SERVICIO DE INTERNET presentados por TECNNITEL.'));
         
-        $fpdf->SetFont('Arial','B',11);
-        $fpdf->SetXY(33,203);
-        $fpdf->cell(40,10,utf8_decode('CONDICIONES APLICABLES AL SERVICIO DE DIFUSIÓN POR SUSCRIPCIÓN'));
-        //segunda pagina
-        $fpdf->SetFont('Arial','',10);
-        $fpdf->SetXY(15,211);
-        $fpdf->MultiCell(186,5,utf8_decode('Es mediante el cual TECNNITEL  se obliga a prestar al cliente por medio de fibra óptica: el servicio de DIFUSIÓN POR SUSCRIPCIÓN que será prestado de forma continua las veinticuatro horas y los trescientos sesenta y cinco días del año durante la vigencia del presente contrato: salvo en caso de mora por parte del cliente o por caso fortuito o de fuerza mayor. En caso de que exista interrupción del servicio de cualquier índole técnica y que perdure como un máximo de veinticuatro horas el cliente deberá ser recompensado con un descuento aplicado a la próxima factura TECNNITEL no es responsable por causa que no estén bajo su control, y que con lleven en alguna interrupción en el servicio de transmisión de la señal.
-Este contrato no incluye servicios adicionales como el servicio de PAGAR POR VER (PPV)'));
-        $fpdf->SetXY(15,252);
-        $fpdf->SetFont('Arial','',9);
-        $fpdf->MultiCell(186,5,utf8_decode('1. OBLIGACIONES ESPECIALES DEL CLIENTE CON RELACIÓN AL SERVICIO DE DIFUSIÓN POR SUSCRIPCIÓN: El cliente se obliga especialmente. A) a no manipular la fibra óptica en ningún otro equipo ya que su ruptura ocasionara el corte de la señal y sub distribuir el servicio a terceras personas B) No conectar equipos adicionales a los consignados en este contrato. C) No alterar, remover ni cambiar total o parcialmente el equipo o los elementos entregados para la prestación de este servicio. D) No contratar ni permitir que personas no autorizadas por TECNNITEL, realicen labores de reparación en los equipos. E), EL cliente autoriza a TECNNITEL el sitio a Instalar los equipos y componentes necesarios para la prestación del servicio, 2. CARGOS ESPECIALES Y TARIFAS EN CASO DE MORA: el cliente acepta que en caso de mora que exceda los diez días por falta de pago TECNNITEL suspenderá el servicio; la reconexión se hará efectiva una vez el cliente cancele la deuda en su totalidad más la cancelación de tres dólares Americanos en concepto de cargo por rehabilitación de servicio. 3. CARGOS Y TARIFAS EN CASO DE TRASLADO DEL DOMICILIO DEL SERVICIO DE DIFUSIÓN POR SUSCRIPCIÓN: En caso de traslado de domicilio el cliente deberá notificar inmediatamente a TECNNITEL para programar la reconexión del servicio en el nuevo domicilio, entendiendo que el nuevo domicilio deberá estar dentro de la red de cobertura del servicio de TECNNITEL. Un cargo de quince dólares deberá ser cancelado por el cliente correspondiente a reconexión por traslado de domicilio, valor que se hará por anticipado. LIMITACIONES Y RESTRICCIONES DE MATERIAL PARA PROVEER DEL SERVICIO DE DIFUSIÓN POR SUSCRIPCIÓN.
-        PAGO DE CUOTA: El cliente se compromete a pagar la cuota mensual y puntual únicamente en la oficina de TECNNITEL según la fecha de contratación.'));
-        // Logo
-
-        $fecha_instalacion = $contrato_internet[0]->fecha_instalacion;
-        if($fecha_instalacion!=""){
-            $corte_fecha = explode("-", $fecha_instalacion);
-
-            $corte_dia = explode(" ", $corte_fecha[2]);
-        }else{
-            $corte_dia=["","",""];
-            $corte_fecha=["","",""];
-        }
-        $fpdf->Image('assets/images/LOGO.png',15,83,60,25); //(x,y,w,h)
-        $fpdf->SetXY(120,86);
-        $fpdf->SetFont('Arial','B',18);
-        $fpdf->cell(40,10,utf8_decode('PAGARÉ SIN PROTESTO'));
-
-        $fpdf->SetFont('Arial','',12);
-        $fpdf->SetXY(143,92);
-        $fpdf->cell(40,10,utf8_decode('Apopa '.$corte_dia[0].' de '.$this->spanishMes($corte_fecha[1]).' de '.$corte_fecha[0].'.'));
-
-        $fpdf->SetXY(168,98);
-        $fpdf->cell(40,10,utf8_decode('Por: U$ '.($contrato_internet[0]->cuota_mensual*$contrato_internet[0]->periodo)));
-
-        $fpdf->SetFont('Arial','',10);
-        $fpdf->SetXY(15,106);
-        $fpdf->MultiCell(186,5,utf8_decode('POR ESTE PAGARÉ, YO, '.$cliente->nombre.', me obligo a pagar incondicionalmente a TECNNITEL, la cantidad de '.($contrato_internet[0]->cuota_mensual*$contrato_internet[0]->periodo).' U$ Dólares, reconociendo, en caso de mora, el interés del (DIEZ%) 10 por ciento mensual sobre saldo Insoluto. 
-La suma antes mencionada la pagaré en esta ciudad, en las oficinas principales de TECNNITEL, el día '.$corte_dia[0].' de '.$this->spanishMes($corte_fecha[1]).' del año '.$corte_fecha[0]).'.');
-
-        $fpdf->SetXY(15,132);
-        $fpdf->MultiCell(186,5,utf8_decode('En caso de acción jurídica y de ejecución, señalo la ciudad de apopa como domicilio especial, siendo a mi cargo, cualquier gasto que la sociedad acreedora antes mencionada hiciere en el cobro de la presente obligación, inclusive los llamados personales y facultó a la sociedad para que designe al depositario judicial de los bienes que se me embarguen a quien revelo de la obligación.'));
-        $fpdf->SetXY(50,150);
-        $fpdf->SetFont('Arial','B',11);
-        $fpdf->cell(40,10,utf8_decode('DUI: '.$cliente->dui).'                       NIT: '.$cliente->nit);
-        $fpdf->SetXY(110,158);
-        $fpdf->SetFont('Arial','',11);
-        $fpdf->cell(40,10,utf8_decode('FIRMA DEL CLIENTE: ______________________'));
-
-        $fpdf->SetFont('Arial','B',11);
-        $fpdf->SetXY(26,166);
-        $fpdf->cell(40,10,utf8_decode('TERMINOS Y CONTRATACIONES GENERALES DE CONTRATACIÓN DE TECNNITEL'));
-        $fpdf->SetXY(15,174);
-        $fpdf->SetFont('Arial','',10);
-        $fpdf->MultiCell(186,5,utf8_decode('Los terminos y condiciones indicados en el mismo por parte de TECNNITEL de Nacionalidad Salvadoreña de este domicilio, en adelante denominada "EI PROVEEDOR". Las condiciones particulares en cuanto a plazo, tarifas y especificaciones de equipo para la prestación de servicios a cada CLIENTE, se encuentran todas detalladas en el presente CONTRATO DE SERVICIO que El CLIENTE suscribe con EI PROVEEDOR, los cuales forman parte Integrante del presente documento CONDICIONES GENERAL APLICABLES 1. PLAZO; el plazo obligatorio de vigencia aplicable a la prestación de los servicios del proveedor que entrará en vigencia se estipula en el presente contrato que El CLIENTE suscribe con EL PROVEEDOR y contará a partir de la fecha de suscripción. Una vez transcurrido el plazo obligatorio antes indicado, el plazo de contrato de cada servicio continuará por tiempo indefinido TERMINACION: anticipada; en caso de que EL CLIENTE solicite la terminación dentro del plazo obligatorio ant Indicado, deberá pagar a El PROVEEDOR, todos y cada unos de los cargos pendientes del pago a la fecha de terminación efectiva del servicio de que se traten y además le obliga a pagar en concepto de penalidad por terminación anticipadas las cantidades señaladas en El CONTRATO DE SERVICIO que corresponda. B) Suspensión por mora EL PROVEEDOR podrá suspender cualquiera de los servicios contratados por Incumplimientos de las obligaciones EI CLIENTE este podrá dar por terminado el plazo de vigencia del presente CONTRATO DE SERVICIO que corresponda.'));
-        $fpdf->SetXY(38,249);
-        //$fpdf->setFillColor(0,0,0); 
-        //$fpdf->SetTextColor(255,255,255);
-        $fpdf->SetFont('Arial','B',11);
-        $fpdf->MultiCell(135,5,utf8_decode('Dirección: Centro comercial Pericentro Local 22 Apopa, San Salvador
-        Correo Electronico: atencion@uninet.com.sv'),1,'C',0);
-        //$fpdf->SetTextColor(0,0,0);
-
+    
         //--------------------------------------------------------------------------------------------------------------------
         //--------------------------------------------------------------------------------------------------------------------
          

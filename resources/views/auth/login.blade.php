@@ -11,8 +11,8 @@ Login
             <div class="col-lg-12">
                 <div class="text-center">
                     <a href="{{url('index')}}" class="mb-5 d-block auth-logo">
-                        <img src="{{ URL::asset('assets/images/LOGO.png')}}" alt="" height="100" class="logo logo-dark">
-                        <img src="{{ URL::asset('assets/images/LOGO.png')}}" alt="" height="100" class="logo logo-light">
+                        <img src="{{ URL::asset('assets/images/logo.png')}}" alt="" height="100" class="logo logo-dark">
+                        <img src="{{ URL::asset('assets/images/logo.png')}}" alt="" height="100" class="logo logo-light">
                     </a>
                 </div>
             </div>
@@ -68,7 +68,7 @@ Login
                     </div>
                 </div>
                 <div class="mt-5 text-center">
-                    <p>© 2021 UNINET.</p>
+                    <p>© 2021 ALDU.</p>
                 </div>
             </div>
         </div>

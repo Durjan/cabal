@@ -12,16 +12,17 @@ class FpdfClass extends Fpdf{
         if ( $this->PageNo() == 1 ) {
            
             // Logo
-            $this->Image('assets/images/LOGO.png',10,5,60,25); //(x,y,w,h)
+            //$this->Image('assets/images/logo.png',10,5,60,25); //(x,y,w,h)
+            $this->Image('assets/images/logo.png',10,5,40,20); //(x,y,w,h)
             // Arial bold 15
-            $this->SetFont('Arial','B',22);
+            //$this->SetFont('Arial','B',22);
             // Movernos a la derecha
-            $this->SetXY(80,10);
+            //$this->SetXY(80,10);
             // Título
-            $this->Cell(25,10,'REDES LITORALES S.A de C.V.');
-            $this->SetXY(81,16);
-            $this->SetFont('Arial','',12);
-            $this->Cell(30,10,'SERVICIO DE TELECOMUNICACIONES');
+            //$this->Cell(25,10,'REDES LITORALES S.A de C.V.');
+            //$this->SetXY(81,16);
+            //$this->SetFont('Arial','',12);
+            //$this->Cell(30,10,'SERVICIO DE TELECOMUNICACIONES');
         }
         
     }
