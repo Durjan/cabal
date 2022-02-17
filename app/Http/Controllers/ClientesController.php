@@ -1245,6 +1245,7 @@ class ClientesController extends Controller
         $contrato_internet= Internet::where('id',$id)->get();
         $id_cliente = $contrato_internet[0]->id_cliente;
         $cliente= Cliente::find($id_cliente);
+        $n_contrato=Internet::where('id_cliente',$id_cliente)->count();
 
         $fpdf = new FpdfClass('P','mm', 'Letter');
         
@@ -1261,13 +1262,25 @@ class ClientesController extends Controller
         $fpdf->cell(33,5,utf8_decode('Cod. De Cliente'),0,0,'R');
         $fpdf->cell(50,5,$cliente->codigo,1);
         $fpdf->cell(32,5,'Cliente Nuevo',0,0,'R');
-        $fpdf->cell(7,5,'Si',0);
+        $fpdf->cell(7,5,'Si',0);        
         $fpdf->SetFont('ZapfDingbats');
-        $fpdf->cell(5,5,chr(52),1,0,'C');
+        if($n_contrato==1){
+            $fpdf->cell(5,5,chr(52),1,0,'C');
+            
+        }else{
+            $fpdf->cell(5,5,'',1,0,'C');
+
+        }
         $fpdf->SetFont('Arial','',12);
         $fpdf->cell(7,5,'No',0);
         $fpdf->SetFont('ZapfDingbats');
-        $fpdf->cell(5,5,chr(52),1,0,'C');
+        if($n_contrato!=1){
+            $fpdf->cell(5,5,chr(52),1,0,'C');
+            
+        }else{
+            $fpdf->cell(5,5,'',1,0,'C');
+
+        }
 
         $fpdf->SetXY(95,26);
         $fpdf->SetFont('Arial','',9);
@@ -1319,7 +1332,7 @@ class ClientesController extends Controller
         $fpdf->SetFont('Arial','',11);
         $fpdf->Cell(55,5,'Fecha de Nacimiento',1,2,'R');
         $fpdf->Cell(20,5,'',0,0,'R');
-        $fpdf->Cell(25,5,'05-09-2022',1,0,'R');
+        $fpdf->Cell(25,5,$cliente->fecha_nacimiento->format('d-m-Y'),1,0,'R');
         
         /*
         $fpdf->SetFont('Arial','',11);
@@ -1362,16 +1375,23 @@ class ClientesController extends Controller
         }else{
             $direccion = $cliente->dirreccion;
         }
-        $direccion = substr($direccion,0,172);
+        $direccion = substr($direccion,0,60);
         $fpdf->cell(135,5,utf8_decode($direccion),1,0);
         $fpdf->cell(20,5,'Fijo',1,0,'C');
-        $fpdf->cell(37,5,'2635-5897',1,1,'L');
+        $fpdf->cell(37,5,$cliente->telefono2,1,1,'L');
         $fpdf->SetXY(17,72);
         $fpdf->cell(135,5,utf8_decode('Dirección de trabajo'),1,0);
         $fpdf->cell(20,5,'Personal',1,0,'C');
-        $fpdf->cell(37,5,'7743-8467',1,0,'L');
+        $fpdf->cell(37,5,$cliente->telefono1,1,0,'L');
         $fpdf->SetXY(17,77);
-        $fpdf->cell(135,5,utf8_decode('Canton las Trancas lot el Pozo Ozatlan Usulutan'),1,0);
+        if($cliente->id_municipio!=0){
+
+            $direccion_cobro = $cliente->dirreccion_cobro.', '.$cliente->get_municipio->nombre.', '.$cliente->get_municipio->get_departamento->nombre;
+        }else{
+            $direccion_cobro = $cliente->dirreccion;
+        }
+        $direccion_cobro = substr($direccion_cobro,0,60);
+        $fpdf->cell(135,5,utf8_decode($direccion_cobro),1,0);
         //$fpdf->TextWithDirection(110,50,'Text on Vertical','L');
         //$fpdf->SetFillColor(255, 215, 0);
         $fpdf->Rect(7, 26, 202 , 60, '');
@@ -1396,7 +1416,7 @@ class ClientesController extends Controller
         $fpdf->SetXY(17,101);
         $fpdf->cell(135,5,utf8_decode('Canton las Trancas lot el Pozo Ozatlan Usulutan'),1,0);
         $fpdf->cell(20,5,'',1,0,'C');
-        $fpdf->cell(37,5,'2635-5897',1,1,'L');
+        $fpdf->cell(37,5,$cliente->telefono1,1,1,'L');
         $fpdf->SetXY(17,108);
         $fpdf->cell(20,5,utf8_decode('Email:'),1,0);
         $fpdf->cell(115,5,utf8_decode(''),1,0);
@@ -1409,32 +1429,45 @@ class ClientesController extends Controller
         $fpdf->SetXY(169,115);
         $fpdf->cell(40,5,'Tamanique',1,0,'L');
         $fpdf->SetXY(17,130);
-        $fpdf->cell(35,5,'Credito Fiscal',1);
+        $fpdf->cell(35,5,'Credito Fiscal',1);        
         $fpdf->SetFont('ZapfDingbats');
-        $fpdf->cell(5,5,chr(52),1,0,'C');
+        if($cliente->tipo_documento==2){
+            $fpdf->cell(5,5,chr(52),1,0,'C');
+            
+        }else{
+            $fpdf->cell(5,5,'',1,0,'C');
+
+        }
         $fpdf->SetFont('Arial','',12);
         $fpdf->cell(35,5,'Consumidor Final',1);
         $fpdf->SetFont('ZapfDingbats');
-        $fpdf->cell(5,5,chr(52),1,1,'C');
+        if($cliente->tipo_documento==1){
+            $fpdf->cell(5,5,chr(52),1,0,'C');
+            
+        }else{
+            $fpdf->cell(5,5,'',1,0,'C');
+
+        }
+
         $fpdf->SetFont('Arial','',10);
         $fpdf->SetXY(19,139);
         $fpdf->cell(80,5,utf8_decode('Persona Jurídica - Razón/Denominación'),1,0);
         $fpdf->cell(105,5,utf8_decode(''),1,1);
         $fpdf->SetXY(19,144);
         $fpdf->cell(50,5,utf8_decode('Número de Registro'),1);
-        $fpdf->cell(25,5,utf8_decode('777777-7'),1,1);
+        $fpdf->cell(25,5,$cliente->numero_registro,1,1);
         $fpdf->SetXY(19,149);
         $fpdf->cell(40,5,utf8_decode('NIT de Comercio'),1);
         $fpdf->cell(40,5,utf8_decode('7777-777777-777-7'),1,1);
         $fpdf->SetXY(19,157);
         $fpdf->cell(40,5,utf8_decode('Giro'),1,0);
-        $fpdf->cell(145,5,utf8_decode(''),1,1);
+        $fpdf->cell(145,5,utf8_decode($cliente->giro),1,1);
         $fpdf->Rect(17, 137, 190 , 26, '');
         $fpdf->Rect(7, 88, 202 , 77, '');
         //----------------------------------------------------------------
         $fpdf->SetFont('Arial','',8);
         $fpdf->SetXY(7,167);
-        $fpdf->MultiCell(202,5,utf8_decode('Declaro que mi información personal es cierta y autorizo a las empresas a comprobar su autenticidad, previo a dar trámite a la solicitud de los servicios. Acepto que la documentación donde conste la información proporcionada para efectos de este contrato, será resguardada por la empresa. Doy fe de lo establecido en el presente formulario y anexos. Confirmo que he leído y entiendo el contrato y las condiciones de la contratación, las cuales fueron presentadas a mi persona por el personal de la empresa. Ratifico el contenido del mismo y firmo.'),1);
+        $fpdf->MultiCell(202,4,utf8_decode('Declaro que mi información personal es cierta y autorizo a las empresas a comprobar su autenticidad, previo a dar trámite a la solicitud de los servicios. Acepto que la documentación donde conste la información proporcionada para efectos de este contrato, será resguardada por la empresa. Doy fe de lo establecido en el presente formulario y anexos. Confirmo que he leído y entiendo el contrato y las condiciones de la contratación, las cuales fueron presentadas a mi persona por el personal de la empresa. Ratifico el contenido del mismo y firmo.'),1);
 
         $fpdf->SetFont('Arial','',9);
         $fpdf->SetXY(7,190);
@@ -1455,6 +1488,14 @@ class ClientesController extends Controller
         $fpdf->cell(35,5,utf8_decode('Velocidades'),1,0,'C');
         $fpdf->cell(35,5,utf8_decode('Plazo de contrato'),1,0,'C');
         $fpdf->Rect(7, 207, 35 , 16, '');//cuadro de velocidades
+        $fpdf->SetFont('Arial','',11);
+        $fpdf->SetXY(7,215);
+        $fpdf->cell(17,3,$contrato_internet[0]->velocidad,0,0,'C');
+        $fpdf->cell(17,3,'5',0,0,'C');
+        $fpdf->cell(9,3,'',0,0,'C');
+        $fpdf->cell(17,3,$contrato_internet[0]->periodo,0,0,'C');
+        $fpdf->SetXY(122,213);
+        $fpdf->cell(17,3,'$ '.$contrato_internet[0]->cuota_mensual,0,0,'C');
         $fpdf->SetFont('Arial','',6);
         $fpdf->SetXY(7,220);
         $fpdf->cell(17,3,utf8_decode('Bajada'),1,0,'C');
@@ -1480,7 +1521,7 @@ class ClientesController extends Controller
         $fpdf->SetXY(7,225);
         $fpdf->cell(135,5,utf8_decode('PAGARE SIN PROTESTO'),1,0,'L');
         $fpdf->cell(20,5,utf8_decode('POR US$'),1,0,'L');
-        $fpdf->cell(40,5,utf8_decode('$460'),1,1,'L');
+        $fpdf->cell(40,5,$contrato_internet[0]->cuota_mensual*$contrato_internet[0]->periodo,1,1,'L');
         $fpdf->SetXY(7,230);
         $fpdf->SetFont('Arial','',8);
         $fpdf->cell(195,5,utf8_decode('                                                                                                      (Ciudad),                             de                                                           de 2021'),1,1,'L');
@@ -1539,389 +1580,97 @@ class ClientesController extends Controller
        
         $fpdf->AliasNbPages();
         $fpdf->AddPage();
-        //$fpdf->SetTitle('CONTRATOS | UNINET');
-
         // Logo
-        $fpdf->Image('assets/images/LOGO.png',10,5,60,25); //(x,y,w,h)
-        // Arial bold 15
-        $fpdf->SetFont('Arial','B',22);
-        // Movernos a la derecha
-        $fpdf->SetXY(80,10);
-        // Título
-        $fpdf->Cell(30,10,'TECNNITEL S.A de C.V.');
-        $fpdf->SetXY(81,16);
+        $fpdf->Image('assets/images/logo.png',10,5,20,20); //(x,y,w,h)
         $fpdf->SetFont('Arial','',12);
-        $fpdf->Cell(30,10,'SERVICIO DE TELECOMUNICACIONES');
-
-        $fpdf->SetXY(180,10);
-        $fpdf->SetFont('Arial','B',10);
-        $fpdf->Cell(20,8,'COPIA',1,1,'C');
-
-        $fpdf->SetXY(175,22);
-        $fpdf->SetFont('Arial','',15);
-        $fpdf->SetTextColor(194,8,8);
-        $fpdf->Cell(30,10,$contrato_internet[0]->numero_contrato);
-        $fpdf->SetTextColor(0,0,0);
-        $fpdf->SetFont('Arial','B',12);
-        $fpdf->SetXY(65,26);
-        $fpdf->cell(30,10,utf8_decode('CONTRATO DE SERVICIO DE INTERNET'));
-        //$contrato_internet[0]->numero_contrato
-        $fpdf->SetXY(165,22);
-        $fpdf->SetFont('Arial','',14);
-        $fpdf->SetTextColor(194,8,8);
-        $fpdf->Cell(30,10,utf8_decode('Nº.'));
-        $fpdf->SetTextColor(0,0,0);
-
-        $fpdf->SetFont('Arial','',11);
+        $fpdf->SetXY(64,10);
+        $fpdf->Cell(20,5,$cliente->nombre);
         
-        $fpdf->SetXY(15,30);
-        $fpdf->cell(40,10,utf8_decode('Servicio No: '.$contrato_internet[0]->numero_contrato));
-        $fpdf->SetXY(38,30);
-        $fpdf->cell(40,10,'_________');
 
-        $fpdf->SetXY(156,30);
-        if(isset($contrato_internet[0]->fecha_instalacion)==1){
-            $fecha_instalacion = $contrato_internet[0]->fecha_instalacion->format('d/m/Y');
-        }else{
-            $fecha_instalacion ="";
-        }
-        $fpdf->cell(30,10,utf8_decode('Fecha: '.$fecha_instalacion));
-        $fpdf->SetXY(169,30);
-        $fpdf->cell(40,10,'______________');
-
-        $fpdf->SetXY(15,36);
-        $fpdf->cell(40,10,utf8_decode('NOMBRE COMPLETO: '.$cliente->nombre));
-        $fpdf->SetXY(57,36);
-        $fpdf->cell(40,10,'__________________________________________________________________');
-
-        $fpdf->SetXY(15,42);
-        $fpdf->cell(40,10,utf8_decode('DUI: '.$cliente->dui));
-        $fpdf->SetXY(24,42);
-        $fpdf->cell(40,10,'______________');
-
-        $fpdf->SetXY(85,42);
-        $fpdf->cell(40,10,utf8_decode('NIT: '.$cliente->nit));
-        $fpdf->SetXY(93,42);
-        $fpdf->cell(40,10,'______________');
-
-        $fpdf->SetXY(153,42);
-        $fpdf->cell(40,10,utf8_decode('TEL: '.$cliente->telefono1));
-        $fpdf->SetXY(163,42);
-        $fpdf->cell(40,10,'_________________');
-
-        $fpdf->SetXY(15,48);
-        $fpdf->cell(40,10,utf8_decode('DIRRECCIÓN:'));
-        $fpdf->SetXY(44,50);
-        $fpdf->SetFont('Arial','',11);
-        if($cliente->id_municipio!=0){
-
-            $direccion = $cliente->dirreccion.', '.$cliente->get_municipio->nombre.', '.$cliente->get_municipio->get_departamento->nombre;
-        }else{
-            $direccion = $cliente->dirreccion;
-        }
-        $direccion = substr($direccion,0,172);
-        $fpdf->MultiCell(158,5,utf8_decode($direccion));
-        $fpdf->SetXY(42,48);
-        $fpdf->SetFont('Arial','',11);
-        $fpdf->cell(40,10,'_________________________________________________________________________');
-        $fpdf->SetXY(42,53);
-        $fpdf->cell(40,10,'_________________________________________________________________________');
-
-
-        $fpdf->SetXY(15,59);
-        $fpdf->cell(40,10,utf8_decode('CORREO ELECTRONICO: '.$cliente->email));
-        $fpdf->SetXY(62,59);
-        $fpdf->cell(40,10,'________________________________________________________________');
-
-        $fpdf->SetFont('Arial','B',12);
-        $fpdf->SetXY(89,65);
-        $fpdf->cell(30,10,utf8_decode('OCUPACIÓN'));
-
-        $fpdf->SetFont('Arial','',11);
-
-        $fpdf->SetXY(15,71);
-        $fpdf->cell(30,10,utf8_decode('EMPLEADO'));
-        $fpdf->SetXY(42,73);
-        $fpdf->SetFont('ZapfDingbats');
-        if($cliente->ocupacion==1){
-
-            $fpdf->cell(10,5,chr(52),1,1,'C');
-        }else{
-            $fpdf->cell(10,5,'',1,1,'C');
-        }
-
-        $fpdf->SetFont('Arial','',12);
-
-        $fpdf->SetXY(57,71);
-        $fpdf->cell(30,10,utf8_decode('COMERCIANTE'));
-        $fpdf->SetXY(92,73);
-        $fpdf->SetFont('ZapfDingbats');
-        if($cliente->ocupacion==2){
-            
-            $fpdf->cell(10,5,chr(52),1,1,'C');
-        }else{
-            $fpdf->cell(10,5,'',1,1,'C');
-
-        }
-
-        $fpdf->SetFont('Arial','',12);
-
-        $fpdf->SetXY(107,71);
-        $fpdf->cell(30,10,utf8_decode('INDEPENDIENTE'));
-        $fpdf->SetXY(145,73);
-        $fpdf->SetFont('ZapfDingbats');
-        if($cliente->ocupacion==3){
-
-            $fpdf->cell(10,5,chr(52),1,1,'C');
-        }else{
-
-            $fpdf->cell(10,5,'',1,1,'C');
-
-        }
-
-        $fpdf->SetFont('Arial','',12);
-
-        $fpdf->SetXY(160,71);
-        $fpdf->cell(30,10,utf8_decode('OTROS'));
-        $fpdf->SetXY(178,73);
-        $fpdf->SetFont('ZapfDingbats');
-        if($cliente->ocupacion==4){
-            $fpdf->cell(10,5,chr(52),1,1,'C');
-            
-        }else{
-            $fpdf->cell(10,5,'',1,1,'C');
-
-        }
-
-        $fpdf->SetFont('Arial','',11);
-
-        $fpdf->SetXY(15,77);
-        $fpdf->cell(30,10,utf8_decode('CONDICIÓN ACTUAL DEL LUGAR DE LA PRESTACIÓN DEL SERVICIO'));
-
-        $fpdf->SetFont('Arial','',11);
-
-        $fpdf->SetXY(15,83);
-        $fpdf->cell(30,10,utf8_decode('CASA PROPIA'));
-        $fpdf->SetXY(47,85);
-        $fpdf->SetFont('ZapfDingbats');
-        if($cliente->condicion_lugar==1){
-            $fpdf->cell(10,5,chr(52),1,1,'C');
-            
-        }else{
-            $fpdf->cell(10,5,'',1,1,'C');
-
-        }
-
-        $fpdf->SetFont('Arial','',11);
-
-        $fpdf->SetXY(60,83);
-        $fpdf->cell(30,10,utf8_decode('ALQUILADA'));
-        $fpdf->SetXY(87,85);
-        $fpdf->SetFont('ZapfDingbats');
-        if($cliente->condicion_lugar==2){
-            $fpdf->cell(10,5,chr(52),1,1,'C');
-            
-        }else{
-            $fpdf->cell(10,5,'',1,1,'C');
-
-        }
-
-        $fpdf->SetFont('Arial','',11);
-
-        $fpdf->SetXY(100,83);
-        $fpdf->cell(30,10,utf8_decode('OTROS'));
-        $fpdf->SetXY(119,85);
-        $fpdf->SetFont('ZapfDingbats');
-        if($cliente->condicion_lugar==3){
-            $fpdf->cell(10,5,chr(52),1,1,'C');
-            
-        }else{
-            $fpdf->cell(10,5,'',1,1,'C');
-
-        }
-
-        $fpdf->SetFont('Arial','',11);
-
-        $fpdf->SetXY(15,89);
-        $fpdf->cell(40,10,utf8_decode('NOMBRE DEL DUEÑO DEL INMUEBLE: '.$cliente->nombre_dueno));
-        $fpdf->SetXY(88,89);
-        $fpdf->cell(40,10,'___________________________________________________');
-
-        $fpdf->SetFont('Arial','B',12);
-        $fpdf->SetXY(70,95);
-        $fpdf->cell(30,10,utf8_decode('SERVICIOS CONTRATADOS'));
-
-        $fpdf->SetFont('Arial','',11);
-
-        $fpdf->SetXY(15,101);
-        $fpdf->cell(40,10,utf8_decode('VELOCIDAD: '.$contrato_internet[0]->velocidad));
-        $fpdf->SetXY(39,101);
-        $fpdf->cell(40,10,'_____________ INTERNET');
-
-        $fpdf->SetXY(95,103);
-        $fpdf->SetFont('ZapfDingbats');
-        $fpdf->cell(10,5,chr(52),1,1,'C');
-
-        $fpdf->SetFont('Arial','',11);
-        $fpdf->SetXY(112,101);
-        $fpdf->cell(40,10,'$ '.$contrato_internet[0]->cuota_mensual);
-        $fpdf->SetXY(114,101);
-        $fpdf->cell(40,10,'_______ TOTAL MENSUAL $ '.$contrato_internet[0]->cuota_mensual);
-        $fpdf->SetXY(165,101);
-        $fpdf->cell(40,10,'_______');
-
-        $fpdf->SetXY(15,107);
-        $fpdf->cell(40,10,utf8_decode('COSTOS POR INSTALACIÓN $ '.$contrato_internet[0]->costo_instalacion));
-        $fpdf->SetXY(68,107);
-        $fpdf->cell(40,10,'__________ (PRECIO INCLUYE IVA)');
-
-        $fpdf->SetXY(15,113);
-        if(isset($contrato_internet[0]->contrato_vence)==1){
-            $contrato_vence = $contrato_internet[0]->contrato_vence->format('d/m/Y');
-        }else{
-            $contrato_vence ="";
-        }
-        $fpdf->cell(40,10,utf8_decode('FECHA INICIO DE CONTRATO: '.$fecha_instalacion.'    FINALIZACIÓN DEL CONTRATO: '.$contrato_vence));
-        $fpdf->SetXY(72,113);
-        $fpdf->cell(40,10,'___________                                                        __________');
-
-        $fpdf->SetFont('Arial','',10);
-        $fpdf->SetXY(15,121);
-        $fpdf->MultiCell(186,5,utf8_decode('El presente contrato es una plaza de '.$contrato_internet[0]->periodo.' meses a partir de la fecha de instalación del servicio por escrito y pudiendo prorrogarse con el consentimiento del mismo. Si el cliente desea dar por finalizada la relación del servicio debe comunicarse a TECNNITEL con quince días de anticipación.'));
-        $fpdf->SetFont('Arial','B',11);
-        $fpdf->SetXY(60,135);
-        $fpdf->cell(40,10,utf8_decode('PENALIDAD POR TERMINACIÓN ANTICIPADA'));
-        $fpdf->SetFont('Arial','',10);
-        $fpdf->SetXY(15,142);
-        $fpdf->MultiCell(186,5,utf8_decode('Si el cliente desea dar por terminado el presente contrato de este servicio de manera anticipada por voluntad propia, se verá en la obligación de cancelar todos los meses pendientes del plazo contratado por el mismo valor y hacer la entrega de los aparatos y accesorios que fueron entregados al cliente en COMODATO que TECNNITEL ha proporcionado para la prestación de estos servicios. La protección de estos componentes queda bajo la responsabilidad del cliente quien responderá por daños o extravíos de los equipos entregados. En caso de daño o extravío el cliente deberá cancelar su valor económico a TECNNITEL. Si hubiere un elemento con falla por causa de fabricación: TECNNITEL lo reemplazará previa recuperación del elemento dañado.'));
-        
-        $fpdf->SetFont('Arial','',11);
-
-        $fpdf->SetXY(55,176);
-        $fpdf->cell(30,10,utf8_decode('ONU'));
-        $fpdf->SetXY(69,178);
-        $fpdf->SetFont('ZapfDingbats');
-        if($contrato_internet[0]->onu==1){
-            $fpdf->cell(10,5,chr(52),1,1,'C');
-            
-        }else{
-            $fpdf->cell(10,5,'',1,1,'C');
-
-        }
-
-        $fpdf->SetFont('Arial','',12);
-
-        $fpdf->SetXY(126,176);
-        $fpdf->cell(30,10,utf8_decode('ONU + CATV'));
-        $fpdf->SetXY(155,178);
-        $fpdf->SetFont('ZapfDingbats');
-        if($contrato_internet[0]->onu_wifi==1){
-            $fpdf->cell(10,5,chr(52),1,1,'C');
-            
-        }else{
-            $fpdf->cell(10,5,'',1,1,'C');
-
-        }
-
-        $fpdf->SetFont('Arial','',12);
-
-        $fpdf->SetXY(33,182);
-        $fpdf->cell(30,10,utf8_decode('CABLE DE RED'));
-        $fpdf->SetXY(69,184);
-        $fpdf->SetFont('ZapfDingbats');
-        if($contrato_internet[0]->cable_red==1){
-            $fpdf->cell(10,5,chr(52),1,1,'C');
-            
-        }else{
-            $fpdf->cell(10,5,'',1,1,'C');
-
-        }
-
-        $fpdf->SetFont('Arial','',12);
-
-        $fpdf->SetXY(133,182);
-        $fpdf->cell(30,10,utf8_decode('ROUTER'));
-        $fpdf->SetXY(155,184);
-        $fpdf->SetFont('ZapfDingbats');
-        if($contrato_internet[0]->router==1){
-            $fpdf->cell(10,5,chr(52),1,1,'C');
-            
-        }else{
-            $fpdf->cell(10,5,'',1,1,'C');
-
-        }
-
-        $fpdf->SetFont('Arial','',10);
-        $fpdf->SetXY(15,190);
-        $fpdf->MultiCell(186,5,utf8_decode('El presente contrato de servicio contiene los términos y las condiciones de contratación de TECNNITEL los cuales he recibido de parte del mismo en este acto, y constituyen los aplicables de manera general a la prestación de SERVICIO DE INTERNET presentados por TECNNITEL.'));
-        
-        $fpdf->SetFont('Arial','B',11);
-        $fpdf->SetXY(33,203);
-        $fpdf->cell(40,10,utf8_decode('CONDICIONES APLICABLES AL SERVICIO DE DIFUSIÓN POR SUSCRIPCIÓN'));
-        //segunda pagina
-        $fpdf->SetFont('Arial','',10);
-        $fpdf->SetXY(15,211);
-        $fpdf->MultiCell(186,5,utf8_decode('Es mediante el cual TECNNITEL  se obliga a prestar al cliente por medio de fibra óptica: el servicio de DIFUSIÓN POR SUSCRIPCIÓN que será prestado de forma continua las veinticuatro horas y los trescientos sesenta y cinco días del año durante la vigencia del presente contrato: salvo en caso de mora por parte del cliente o por caso fortuito o de fuerza mayor. En caso de que exista interrupción del servicio de cualquier índole técnica y que perdure como un máximo de veinticuatro horas el cliente deberá ser recompensado con un descuento aplicado a la próxima factura TECNNITEL no es responsable por causa que no estén bajo su control, y que con lleven en alguna interrupción en el servicio de transmisión de la señal.
-Este contrato no incluye servicios adicionales como el servicio de PAGAR POR VER (PPV)'));
-        $fpdf->SetXY(15,252);
-        $fpdf->SetFont('Arial','',9);
-        $fpdf->MultiCell(186,5,utf8_decode('1. OBLIGACIONES ESPECIALES DEL CLIENTE CON RELACIÓN AL SERVICIO DE DIFUSIÓN POR SUSCRIPCIÓN: El cliente se obliga especialmente. A) a no manipular la fibra óptica en ningún otro equipo ya que su ruptura ocasionara el corte de la señal y sub distribuir el servicio a terceras personas B) No conectar equipos adicionales a los consignados en este contrato. C) No alterar, remover ni cambiar total o parcialmente el equipo o los elementos entregados para la prestación de este servicio. D) No contratar ni permitir que personas no autorizadas por TECNNITEL, realicen labores de reparación en los equipos. E), EL cliente autoriza a TECNNITEL el sitio a Instalar los equipos y componentes necesarios para la prestación del servicio, 2. CARGOS ESPECIALES Y TARIFAS EN CASO DE MORA: el cliente acepta que en caso de mora que exceda los diez días por falta de pago TECNNITEL suspenderá el servicio; la reconexión se hará efectiva una vez el cliente cancele la deuda en su totalidad más la cancelación de tres dólares Americanos en concepto de cargo por rehabilitación de servicio. 3. CARGOS Y TARIFAS EN CASO DE TRASLADO DEL DOMICILIO DEL SERVICIO DE DIFUSIÓN POR SUSCRIPCIÓN: En caso de traslado de domicilio el cliente deberá notificar inmediatamente a TECNNITEL para programar la reconexión del servicio en el nuevo domicilio, entendiendo que el nuevo domicilio deberá estar dentro de la red de cobertura del servicio de TECNNITEL. Un cargo de quince dólares deberá ser cancelado por el cliente correspondiente a reconexión por traslado de domicilio, valor que se hará por anticipado. LIMITACIONES Y RESTRICCIONES DE MATERIAL PARA PROVEER DEL SERVICIO DE DIFUSIÓN POR SUSCRIPCIÓN.
-        PAGO DE CUOTA: El cliente se compromete a pagar la cuota mensual y puntual únicamente en la oficina de TECNNITEL según la fecha de contratación.'));
-        // Logo
-
-        $fecha_instalacion = $contrato_internet[0]->fecha_instalacion;
-        if($fecha_instalacion!=""){
-            $corte_fecha = explode("-", $fecha_instalacion);
-
-            $corte_dia = explode(" ", $corte_fecha[2]);
-        }else{
-            $corte_dia=["","",""];
-            $corte_fecha=["","",""];
-        }
-        $fpdf->Image('assets/images/LOGO.png',15,83,60,25); //(x,y,w,h)
-        $fpdf->SetXY(120,86);
-        $fpdf->SetFont('Arial','B',18);
-        $fpdf->cell(40,10,utf8_decode('PAGARÉ SIN PROTESTO'));
-
-        $fpdf->SetFont('Arial','',12);
-        $fpdf->SetXY(143,92);
-        $fpdf->cell(40,10,utf8_decode('Apopa '.$corte_dia[0].' de '.$this->spanishMes($corte_fecha[1]).' de '.$corte_fecha[0].'.'));
-
-        $fpdf->SetXY(168,98);
-        $fpdf->cell(40,10,utf8_decode('Por: U$ '.($contrato_internet[0]->cuota_mensual*$contrato_internet[0]->periodo)));
-
-        $fpdf->SetFont('Arial','',10);
-        $fpdf->SetXY(15,106);
-        $fpdf->MultiCell(186,5,utf8_decode('POR ESTE PAGARÉ, YO, '.$cliente->nombre.', me obligo a pagar incondicionalmente a TECNNITEL, la cantidad de '.($contrato_internet[0]->cuota_mensual*$contrato_internet[0]->periodo).' U$ Dólares, reconociendo, en caso de mora, el interés del (DIEZ%) 10 por ciento mensual sobre saldo Insoluto. 
-La suma antes mencionada la pagaré en esta ciudad, en las oficinas principales de TECNNITEL, el día '.$corte_dia[0].' de '.$this->spanishMes($corte_fecha[1]).' del año '.$corte_fecha[0]).'.');
-
-        $fpdf->SetXY(15,132);
-        $fpdf->MultiCell(186,5,utf8_decode('En caso de acción jurídica y de ejecución, señalo la ciudad de apopa como domicilio especial, siendo a mi cargo, cualquier gasto que la sociedad acreedora antes mencionada hiciere en el cobro de la presente obligación, inclusive los llamados personales y facultó a la sociedad para que designe al depositario judicial de los bienes que se me embarguen a quien revelo de la obligación.'));
-        $fpdf->SetXY(50,150);
-        $fpdf->SetFont('Arial','B',11);
-        $fpdf->cell(40,10,utf8_decode('DUI: '.$cliente->dui).'                       NIT: '.$cliente->nit);
-        $fpdf->SetXY(110,158);
-        $fpdf->SetFont('Arial','',11);
-        $fpdf->cell(40,10,utf8_decode('FIRMA DEL CLIENTE: ______________________'));
-
-        $fpdf->SetFont('Arial','B',11);
-        $fpdf->SetXY(26,166);
-        $fpdf->cell(40,10,utf8_decode('TERMINOS Y CONTRATACIONES GENERALES DE CONTRATACIÓN DE TECNNITEL'));
-        $fpdf->SetXY(15,174);
-        $fpdf->SetFont('Arial','',10);
-        $fpdf->MultiCell(186,5,utf8_decode('Los terminos y condiciones indicados en el mismo por parte de TECNNITEL de Nacionalidad Salvadoreña de este domicilio, en adelante denominada "EI PROVEEDOR". Las condiciones particulares en cuanto a plazo, tarifas y especificaciones de equipo para la prestación de servicios a cada CLIENTE, se encuentran todas detalladas en el presente CONTRATO DE SERVICIO que El CLIENTE suscribe con EI PROVEEDOR, los cuales forman parte Integrante del presente documento CONDICIONES GENERAL APLICABLES 1. PLAZO; el plazo obligatorio de vigencia aplicable a la prestación de los servicios del proveedor que entrará en vigencia se estipula en el presente contrato que El CLIENTE suscribe con EL PROVEEDOR y contará a partir de la fecha de suscripción. Una vez transcurrido el plazo obligatorio antes indicado, el plazo de contrato de cada servicio continuará por tiempo indefinido TERMINACION: anticipada; en caso de que EL CLIENTE solicite la terminación dentro del plazo obligatorio ant Indicado, deberá pagar a El PROVEEDOR, todos y cada unos de los cargos pendientes del pago a la fecha de terminación efectiva del servicio de que se traten y además le obliga a pagar en concepto de penalidad por terminación anticipadas las cantidades señaladas en El CONTRATO DE SERVICIO que corresponda. B) Suspensión por mora EL PROVEEDOR podrá suspender cualquiera de los servicios contratados por Incumplimientos de las obligaciones EI CLIENTE este podrá dar por terminado el plazo de vigencia del presente CONTRATO DE SERVICIO que corresponda.'));
-        $fpdf->SetXY(38,249);
-        //$fpdf->setFillColor(0,0,0); 
-        //$fpdf->SetTextColor(255,255,255);
-        $fpdf->SetFont('Arial','B',11);
-        $fpdf->MultiCell(135,5,utf8_decode('Dirección: Centro comercial Pericentro Local 22 Apopa, San Salvador
-        Correo Electronico: atencion@uninet.com.sv'),1,'C',0);
+        $fpdf->SetXY(10,30);
+        $fpdf->SetFont('Arial','',8);
         //$fpdf->SetTextColor(0,0,0);
-
+        $fpdf->Multicell(195,5,utf8_decode('1. OBJETO. REDES LITORALES, S.A. de C.V. (en adelante REDES LITORALES) identificada indistintamente como la empresa, quien prestará los servicios navegación por Internet de forma inalámbrica, acceso dedicado a Internet, y cualesquiera otros servicios suplementarios y/o de valor agregado prestados a través de las redes e infraestructura de telecomunicaciones con las que cuenten la empresa. Los servicios se prestan al CLIENTE en su condición de destinatario o usuario final de los mismos, y con base a las estipulaciones ahora establecidas en este documento o cualquiera de sus anexos.'),0);
+        //$fpdf->SetXY(7,50);
+        $fpdf->Multicell(195,5,utf8_decode(' 2. TARIFAS, FACTURACIÓN Y PAGO. El CLIENTE abonará a la empresa las cantidades resultantes de la prestación de cada uno de los servicios contratados, según las tarifas contratadas con el usuario. Adicionalmente, el CLIENTE cancelará las cantidades resultantes por cualquier servicio suplementario y/o de valor agregado utilizado, y las tarifas, de traslados, desinstalaciones y desconexiones. Los pagos serán facturados en dólares de Estados Unidos de América, por períodos mensuales, acorde a los sistemas de facturación utilizados por la empresa. El CLIENTE deberá pagar las facturas en las fechas estipuladas en las mismas, dichos pagos podrán realizarse en cualquiera de los siguientes lugares de acuerdo con preferencia y disponibilidad: Centros de Servicio CABAL, instituciones bancarias y/o financieras y/o cualquier otro medio autorizado al efecto por la empresa. Se aplicará el cargo por pago tardío correspondiente para cada servicio, según el monto estipulado en el contrato. Las facturas reflejarán los conceptos por los servicios utilizados. La falta de recepción de la factura no inhibe la obligación de pago derivada de la prestación de los servicios siendo responsabilidad del cliente notificar a la empresa dicha situación. La empresa, previa autorización del cliente, podrá entregar facturas por cualquier medio electrónico. FACTURACIÓN ELECTRONICA: El envío de factura por medio electrónico se regirá bajo las siguientes condiciones: (a) El envío de factura por medio electrónico exime a la empresa de enviar la factura física a la dirección de correspondencia del CLIENTE. (b) La empresa expedirán la factura por medio electrónico de acuerdo con sus procesos internos y una vez emitida la enviará por el o los medios electrónicos seleccionados por el CLIENTE, quien será responsable de la verificación mensual de la recepción de la misma. (c) El CLIENTE reconoce, entiende y acepta que es su responsabilidad contar con la disponibilidad de recibir la facturación por los medios electrónicos por él seleccionados (d) En el caso de que El CLIENTE no reciba la factura en los medios designados, no se eximirá su responsabilidad de pago, y además deberá de notificar a la empresa dicha situación (e) En el caso que El CLIENTE designe más de un medio, la empresa dará prioridad al correo electrónico.'),0);
+        $fpdf->Multicell(195,5,utf8_decode('3. DURACIÓN Y TERMINACIÓN. El plazo de los servicios contratados se establecerá en el contrato, o sus anexos para cada servicio, pudiendo acordarse por las partes plazo obligatorio o se podrá celebrar sin plazo obligatorio y por lo tanto por tiempo indefinido, contado su vigencia partir del día de instalación, activación, uso y/o programación de cada uno de los servicios, y hasta que el cliente decida darlo de baja.'),0);
+        $fpdf->Multicell(195,5,utf8_decode('3.1. DERECHO A DARSE DE BAJA: El CLIENTE tiene derecho a darse de baja de conformidad a lo establecido en el artículo 13-8 de la Ley de Protección al Consumidor, para hacer uso de tal derecho EL CLIENTE deberá, comunicarlo a la empresa con una antelación de diez (10) días hábiles al momento en que haya de surtir efectos, en el caso de darse de baja antes del vencimiento del plazo obligatorio deberá cancelar la penalidad establecida en la cláusula quince.'),0);
+        $fpdf->Multicell(195,5,utf8_decode('3.2. CONTINUIDAD DE LOS SERVICIOS: Una vez finalizado el plazo obligatorio pactado o cuando no exista plazo obligatorio pactado por las partes, sin que el cliente solicite la baja, los servicios se continuarán prestando de forma indefinida, pudiendo el cliente darse de baja en cualquier momento notificándolo con una antelación de diez (10) días hábiles al momento en que haya de surtir efectos la baja, sin incurrir en ninguna penalidad. '),0);
+        $fpdf->Multicell(195,5,utf8_decode(' 3.3. TERMINACIÓN GENERICA: El plazo obligatorio pactado también podrá terminarse por: Las causas generales de extinción de los contratos, las establecidas en la ley, así mismo la empresa tendrán derecho a darlo por terminado en los siguientes casos: a) cuando el CLIENTE utilice indebidamente los servicios, efectúe fraude de telecomunicaciones o haga uso ilícito de los servicios b) Cuando el CLIENTE se encuentre en mora por más de dos meses (2) consecutivos, y c) Cuando EL CLIENTE solicite la prestación de servicios en lugares distintos a los establecidos en el contrato o en lugares en los que la empresa se vea imposibilitada física o técnicamente para proveer los mismos. La terminación de la prestación de los servicios no eximirá al CLIENTE de sus obligaciones frente a la empresa por los bienes y servicios recibidos. EL CLIENTE acepta que la empresa podrá notificarle sobre la finalización del plazo obligatorio de este contrato a través de los medios técnicos de acuerdo con disponibilidad y conveniencia.'),0);
+        $fpdf->Multicell(195,5,utf8_decode(' 4. ACTIVACIÓN, PROPIEDAD DE LOS EQUIPOS Y FUNCIONAMIENTO DEL SERVICIO. Los servicios serán prestados únicamente a través de los accesos, números y/o habilitaciones que la empresa entregue o efectúe a favor del CLIENTE. Los equipos proporcionados para proveer los servicios contratados se entenderán entregados a EL CLIENTE en la calidad en que se indique en el contrato. Los equipos entregados en calidad de comodato y/o arrendamiento son propiedad de la empresa, Los equipos entregados a EL CLIENTE en concepto de compraventa, donación o venta a plazos son propiedad del CLIENTE siempre y cuando se cumplan las condiciones pactadas en el presente instrumento o sus anexos. La entrega de los equipos, dependiendo del servicio, se realizará a través de la emisión de una orden de entrega y/o instalación, la cual será firmada por el usuario, o en su defecto por la persona que se encuentre en el domicilio de instalación señalado por el CLIENTE.'),0);
+        
+        $fpdf->AliasNbPages();
+        $fpdf->AddPage();
+        // Logo
+        $fpdf->Image('assets/images/logo.png',10,5,20,20); //(x,y,w,h)
+        $fpdf->SetFont('Arial','',10);
+        $fpdf->SetXY(66,10);
+        $fpdf->cell(33,5,utf8_decode('Contrato Nº'),0,0,'R');
+        $fpdf->cell(50,5,$contrato_internet[0]->numero_contrato,1);
+        $fpdf->SetXY(66,16);
+        $fpdf->cell(33,5,utf8_decode('Cod. De Cliente'),0,0,'R');
+        $fpdf->cell(50,5,$cliente->codigo,1);
         
 
-
+        $fpdf->SetXY(10,30);
+        $fpdf->SetFont('Arial','',8);
+        $fpdf->Multicell(195,4,utf8_decode('En caso de hurto, robo o pérdida de los equipos, es responsabilidad del CLIENTE notificar a la empresa para el inmediato bloqueo de los servicios y se deberá presentar la denuncia correspondiente ante las autoridades competentes, haciendo llegar una copia certificada de la denuncia a cualquiera de los Centros de Servicio de la empresa dentro de los siguientes cinco. (5) días de su interposición. La pérdida, destrucción, deterioro, robo, hurto o extravío de los equipos no inhibe la obligación de pago derivada de la prestación de los servicios que se encuentren disponibles para El CLIENTE. S. GARANTÍA COMERCIAL. Los equipos provistos para la prestación de los servicios gozarán de la garantía otorgada por sus fabricantes por lo que estarán sujetos a los términos y condiciones del producto adquirido; salvo que se disponga lo contrario en un documento especial anexo al presente contrato.'),0);
+        $fpdf->Multicell(195,4,utf8_decode('6. CALIDAD, COBERTURA Y MANTENIMIENTO DEL SERVICIO. La empresa prestará sus servicios conforme a los niveles de calidad, parámetros y métodos establecidos en la legislación vigente y las condiciones de este contrato y/o cualquiera de sus anexos. En cualquier supuesto, el usuario reconoce especialmente que cuenta con toda la información relativa a la cobertura y calidad de los servicios prestados. La empresa prestará el servicio exclusivamente en las zonas de cobertura dentro del territorio nacional en el que el mismo esté implantado, según la información de cobertura de cada servicio disponible en cualquiera de los Centros de Servicio de la empresa. El CLIENTE entiende que los servicios móviles y servicios de internet podrán verse afectados por condiciones estructurales, orográficas y/o atmosféricas, manipulación inadecuada por el usuario, cantidad de usuarios conectados, o cualquier otra situación que impidan, imposibiliten o degraden su prestación en cuyo caso se actuará conforme a lo establecido en la legislación vigente. En el caso de los servicios residenciales EL CLIENTE reconoce que los mismos serán prestados en la dirección y domicilio proporcionado al momento de la contratación. La empresa dará mantenimiento preventivo y correctivo de sus infraestructuras, equipos y/o redes para la prestación de los servicios, de manera que, si se produjeran averías, interrupciones o mal funcionamiento de los servicios por causas fortuitas o de fuerza mayor, la empresa reparará en el plazo más breve posible los fallos o averías producidos. La empresa no será responsable por daños en la configuración y/o funcionamiento en los equipos propiedad del usuario, una vez que el servicio haya sido instalado/activado a su entera satisfacción.'),0);
+        $fpdf->Multicell(195,4,utf8_decode('7. SUSPENSIÓN TEMPORAL DE LOS SERVICIOS. La empresa podrá suspender la prestación de los servicios, incluso el plazo de vigencia pactado, sin previo aviso en los casos establecidos en la legislación vigente. La empresa, previo aviso a EL CLIENTE, podrán suspender los servicios en los siguientes casos: indicio de fraude de telecomunicaciones, uso ilícito del servicio o, mora en el pago de los servicios del cliente. Cuando la empresa deba hacer una suspensión general, temporal y continua de cualquiera de los servicios, la empresa hará los avisos correspondientes de acuerdo a la ley; en estos casos éstas no serán responsables por los daños y perjuicios ocasionados por la suspensión, ni será motivo de incumplimiento contractual. El CLIENTE acepta, la limitación de uso de cualquiera de los servicios y tendrá lugar cuando haya excedido el límite de crédito, cuando tenga facturas pendientes de pago o cuando se haya solicitado el bloqueo de servicios de suplementarios y/o de valor agregado. '),0);
+        $fpdf->Multicell(195,4,utf8_decode('8. LÍMITE DE CRÉDITO. La empresa pone a disposición del CLIENTE un crédito de consumo por cada servicio contratado, el cual será determinado y, posteriormente modificado a solicitud del CLIENTE, con base a su comportamiento crediticio. '),0);
+        $fpdf->Multicell(195,4,utf8_decode('9. GARANTÍAS DE PAGO. El CLIENTE pone a disposición de cada prestador del servicio, un título valor que respaldará el pago de las cantidades resultantes de cualquiera de los servicios utilizados y el valor total de los equipos provistos. El título valor será devuelto, a solicitud del cliente, dentro de los quince (15) días hábiles siguientes a la fecha efectiva de terminación de todos los servicios, previa cancelación de todas las obligaciones pendientes de pago. Adicionalmente a lo anterior, el CLIENTE pondrá a disposición de la empresa cualquier otro tipo de garantías para la Formación y ejecución de este contrato, las cuales estarán contenidas en documentos anexos a este instrumento. '),0);
+        $fpdf->Multicell(195,4,utf8_decode('10. SECRETO DE LAS COMUNICACIONES. La empresa adoptará las medidas técnicas y organizativas necesarias conforme a la legislación vigente a fin de garantizar el secreto de las telecomunicaciones. En cualquier caso, la empresa quedará exoneradas de toda responsabilidad derivada de la obtención ilegal de material y/o información, de su uso o publicidad por terceros, y en general, de cuantas acciones u omisiones, incluso de entidades gubernamentales, que, no siendo imputables a la empresa, supongan un quebrantamiento del secreto de las comunicaciones. '),0);
+        $fpdf->Multicell(195,4,utf8_decode('11. CESIÓN. EL CLIENTE no podrá ceder el presente contrato, ni los servicios adquiridos, a terceros sin el consentimiento escrito previo de la empresa. La empresa podrá ceder el contrato a las sociedades filiales y/o subsidiarias pertenecientes a la empresa.'),0);
+        $fpdf->Multicell(195,4,utf8_decode('12. INFORMACIÓN DE LOS SERVICIOS. La empresa facilitará al CLIENTE la información necesaria y conveniente para una adecuada prestación del servicio, la cual podrá ser suministrada en medios de comunicación social, Centros de Servicio, Centro de Llamadas, en su página web, puntos de venta o comercializadores autorizados. En caso de que el CLIENTE solicite información particular sobre la prestación de los servicios, la empresa se las proporcionará sin cargo alguno. Asimismo, el CLIENTE acepta recibir información respecto de los productos y servicios contratados a través de medios técnicos tales como correo electrónico, telefax, mensajes cortos, televisión, teléfono y cualquier otra tecnología que permita la comunicación a distancia. El CLIENTE establece como medio de notificación, las direcciones físicas y electrónicas, números de teléfono y demás datos proporcionados en el presente contrato.'),0);
+        $fpdf->Multicell(195,4,utf8_decode('13. VALIDACIÓN DE MEDIOS TÉCNICOS. Las partes reconocen la validez de los datos y procedimientos electrónicos y/o telemáticos para la prestación e incorporación de servicios. El cliente consiente expresamente que podrán utilizarse los medios técnicos para expresar el consentimiento del CLIENTE para la modificación, incorporación y/o supresión de servicios disponibles incluyendo servicios de valor agregado. El CLIENTE es responsable de la custodia diligente y el mantenimiento de la confidencialidad de su información, así como de las contraseñas, claves de acceso, sistemas cifrados o sistemas de encriptación de comunicación, que sean facilitados por la empresa, dichos mecanismos se entenderán que son utilizados únicamente por El CLIENTE.'),0);
+        $fpdf->Multicell(195,4,utf8_decode('14. MODIFICACIÓN DEL CONTRATO. EL CLIENTE podrá realizar adiciones o mejoras de los servicios contratados, aceptándolos través de cualquiera de los medios establecidos en la cláusula trece (13) de este instrumento; una vez aceptados se entenderá estar de acuerdo en los términos, condiciones, precio y plazo de los mismos.'),0);
+        $fpdf->Multicell(195,4,utf8_decode('15. PENALIDADES. La empresa podrá establecer penalidades por terminación anticipada, uso indebido o ilegal de los servicios, incumplimiento del contrato y otras causales que conforme a la legislación salvadoreña sean aplicables. En caso de terminación anticipada del plazo obligatorio el CLIENTE, este deberá de pagar a la empresa, el valor de los bienes y servicios recibidos a la fecha efectiva de terminación, a su vez El CLIENTE cancelará en'),0);
         
+        $fpdf->AliasNbPages();
+        $fpdf->AddPage();
+        // Logo
+        $fpdf->Image('assets/images/logo.png',10,5,20,20); //(x,y,w,h)
+        $fpdf->SetFont('Arial','',10);
+        $fpdf->SetXY(66,10);
+        $fpdf->cell(33,5,utf8_decode('Contrato Nº'),0,0,'R');
+        $fpdf->cell(50,5,$contrato_internet[0]->numero_contrato,1);
+        $fpdf->SetXY(66,16);
+        $fpdf->cell(33,5,utf8_decode('Cod. De Cliente'),0,0,'R');
+        $fpdf->cell(50,5,$cliente->codigo,1);
+        $fpdf->cell(32,5,'Cliente Nuevo',0,0,'R');
+        $fpdf->cell(7,5,'Si',0);        
+        $fpdf->SetFont('ZapfDingbats');
+        if($n_contrato==1){
+            $fpdf->cell(5,5,chr(52),1,0,'C');
+            
+        }else{
+            $fpdf->cell(5,5,'',1,0,'C');
+
+        }
+        $fpdf->SetFont('Arial','',12);
+        $fpdf->cell(7,5,'No',0);
+        $fpdf->SetFont('ZapfDingbats');
+        if($n_contrato!=1){
+            $fpdf->cell(5,5,chr(52),1,0,'C');
+            
+        }else{
+            $fpdf->cell(5,5,'',1,0,'C');
+
+        }
+
+
+        $fpdf->SetXY(10,30);
+        $fpdf->SetFont('Arial','',8);
+        $fpdf->Multicell(195,4,utf8_decode('concepto de penalidad a la empresa una cantidad equivalente al daño producido por la terminación anticipada del contrato, el cual será un monto equivalente al ochenta por ciento (80%) de los cargos básicos de los servicios que hacen falta para la terminación del contrato; si al cliente se le entregaron dispositivos en calidad distinta a una venta a plazo, se actuará de acuerdo al anexo de equipos.'),0);
+        $fpdf->Multicell(195,4,utf8_decode('16. ATENCIÓN AL CLIENTE. Existe a disposición del CLIENTE, en cualquiera de los Centros de Servicio y Centro de Llamadas, un área de atención a la que podrá dirigir peticiones de información sobre los servicios contratados.'),0);
+        $fpdf->Multicell(195,4,utf8_decode('17. ATENCION A RECLAMOS. El CLIENTE podrá presentar sus reclamos relacionados con la prestación de los servicios, en aquellos Centros de Servicios que para tal efecto dispongan la empresa. Cuando la reclamación haya sido solucionada, la empresa informará al CLIENTE de la solución adoptada a través de los medios designados por el CLIENTE.'),0);
+        $fpdf->Multicell(195,4,utf8_decode('18. LEGISLACIÓN APLICABLE Y DOMICILIO. Las partes acuerdan que las presentes condiciones generales y/o sus anexos se sujetan a la legislación de la República de El Salvador, y los conflictos derivados de los mismos se sujetan a las reglas de jurisdicción y competencia de la legislación común.'),0);
+        
+        $fpdf->SetXY(10,80);
+        $fpdf->Multicell(195,4,utf8_decode('SERVICIO DE INTERNET RESIDENCIAL. El servicio de Internet será prestado bajo las siguientes condiciones: 1) El CLIENTE utilizará el servicio únicamente desde el número de protocolo de interconexión asignado por la empresa y los requerimientos técnicos de los equipos del CLIENTE que se indiquen al efecto; 2) De forma continua, las veinticuatro horas del día, todos los días del año, durante la vigencia del período contratado para la prestación del servicio, a la velocidad establecida en el plan seleccionado. EL CLIENTE entiende que la velocidad de navegación depende de diversos factores técnicos, tales como: características y cantidad de los equipos conectados a la red, incompatibilidad con otras tecnología o software utilizadas por el cliente, entre otros similares, y en caso de proceder compensación se actuará de conformidad a la ley vigente 3) El CLIENTE garantizará las instalaciones eléctricas, equipos de protección asociados y el equipo informático adecuado para acceder al servicio. 4) Bajo la legislación nacional e internacional vigente que velan por los derechos de propiedad intelectual, protección de menores, protección de datos y otras; el uso y/o descarga de contenido ilegal puede constituir infracción a tales legislaciones; en consecuencia, la empresa por requerimiento administrativo o judicial se encuentran obligadas a revelar la información de la titularidad de la conexión de donde se originaron los usos indebidos a la red. En estos casos, el CLIENTE asume toda la responsabilidad derivada del uso indebido del servicio; 5) El CLIENTE podrá en cualquier tiempo mejorar el servicio contratado a través de los diversos medios técnicos puestos a disposición por la empresa.*'),0);
+        $fpdf->Cell(195,10,utf8_decode('ANEXO DE EQUIPOS'),0,1);
+        $fpdf->Multicell(195,4,utf8_decode('Para efectos de la prestación de los servicios descritos en las condiciones generales de contratación se entenderán como equipos, modems, routers, cajas decodificadoras, entre otros necesarios para las comunicaciones. La empresa podrá poner a disposición del CLIENTE según las condiciones contratadas y seleccionadas los equipos acordes a las siguientes estipulaciones: l. CONDICIONES DEL COMODATO. La empresa serán las propietarias de los equipos entregados al CLIENTE para la prestación de los servicios, y el CLIENTE se obliga a mantener la debida diligencia y el cuidado de los mismos; siendo éste último responsable de las averías resultantes cuando le fueren imputables; caso contrario, la empresa deberán sustituir los bienes a solicitud del CLIENTE y cuando a criterio de la empresa se requiera. Asimismo, en caso de restitución de equipos, por ejemplo,'),0);
+        $fpdf->Multicell(195,4,utf8_decode('por terminación contractual, EL CLIENTE deberá devolverlos a la empresa en un plazo máximo de diez (10) días hábiles; caso contrario, EL CLIENTE reconoce que deberá cancelar el valor del mercado de los equipos al momento de la contratación. En caso de que el CLIENTE contrate servicios residenciales, se entregarán en calidad de comodato los siguientes equipos: caja digital principal, Cable Modem, y Router. La empresa podrá disponer forma distinta de adquirir el equipo conforme a las observaciones descritas en el contrato. 11. CONDICIONES DEL ARRENDAMIENTO. El valor de los equipos entregados en concepto de arrendamiento será determinado, en el caso que aplicare, en las condiciones comerciales o de promoción. El CLIENTE reconoce que los equipos son propiedad de la empresa y deberán ser restituidos al finalizar la relación contractual. Durante el tiempo que dure el arrendamiento, el CLIENTE se obliga a mantener la debida diligencia y cuido en los mismos, siendo éste responsable de la pérdida, extravío, destrucción, averías, robo, hurto u otras causas resultantes cuando le fueren imputables. La empresa podrá disponer forma distinta de adquirir el equipo conforme a las observaciones descritas en el contrato. El Cliente deberá de cancelar el costo administrativo determinado por LA EMPRESA por el retiro de los equipos. 111. CONDICIONES DE LA DONACIÓN SUJETA A CONDICIÓN. Los equipos entregados sin costo para EL CLIENTE, se entenderán gratuitos siempre y cuando este último cumpla tanto con los términos y condiciones generales de contratación, así como el plazo de vigencia obligatorio. El CLIENTE se obliga a mantener la debida diligencia y cuido de los equipos, siendo éste responsable de la pérdida, extravío, destrucción, averías, robo, hurto u otras causas resultantes cuando le fueren imputables. En caso de terminación anticipada del contrato, EL CLIENTE se obliga a pagar a la empresa el valor de mercado del equipo al tiempo de la contratación, además de las penalidades a que hubiere lugar, de conformidad a lo establecido en las condiciones de este contrato. IV. PLAZO: El plazo del comodato y/o arrendamiento y/o venta a plazos será el acordado según las condiciones comerciales, de promoción o las establecidas en el presente instrumento. V. ENTREGA DE LOS EQUIPOS. En este acto, el CLIENTE acepta y recibe a satisfacción los equipos en perfecto estado de funcionamiento, por haber sido revisados y puestos a su disposición, previo a su entrega material.'),0);
         $fpdf->Output();
         exit;
 
