@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Fpdf\FpdfClass;
+use App\Fpdf\Rotation;
 use App\Fpdf\FpdfEstadoCuenta;
 use App\Models\Abono;
 use App\Models\Actividades;
@@ -1247,10 +1248,12 @@ class ClientesController extends Controller
         $cliente= Cliente::find($id_cliente);
         $n_contrato=Internet::where('id_cliente',$id_cliente)->count();
 
-        $fpdf = new FpdfClass('P','mm', 'Letter');
+        //$fpdf = new FpdfClass('P','mm', 'Letter');
+        $fpdf = new Rotation('P','mm', 'Letter');
         
         $fpdf->AliasNbPages();
         $fpdf->AddPage();
+        $fpdf->Image('assets/images/logo.png',10,5,20,20); //(x,y,w,h)
         $fpdf->SetTitle('CONTRATOS | CABAL');
 
         $fpdf->SetTextColor(0,0,0);
@@ -1281,81 +1284,63 @@ class ClientesController extends Controller
             $fpdf->cell(5,5,'',1,0,'C');
 
         }
-
+        //TEXTO VERTICALL------------
+        $fpdf->SetXY(10,150);
+        $fpdf->SetFont('Arial','B',12);
+        $fpdf->Rotate(90);
+        $fpdf->cell(45,5,utf8_decode('Información de Cobro'),0);
+        $fpdf->cell(26,5,'',0);
+        $fpdf->cell(45,5,utf8_decode('Información Personal'),0);
+        $fpdf->Rotate(0);
+        //END TEXT VERTICAL-----------------
         $fpdf->SetXY(95,26);
         $fpdf->SetFont('Arial','',9);
         $fpdf->cell(7,5,'Nombre del cliente',0);
-        
-        //$contrato_internet[0]->numero_contrato
         $fpdf->SetXY(17,30);
         $fpdf->SetFont('Arial','',11);
         //$fpdf->SetTextColor(194,8,8);color rojo
         $fpdf->Cell(185,7,utf8_decode($cliente->nombre),1,0,'C');
 
         $fpdf->SetXY(17,37);
-        $fpdf->Cell(20,5,utf8_decode('DUI'),1,0,'C');
+        $fpdf->Cell(20,5,'DUI',0,0,'C');
         $fpdf->SetFont('ZapfDingbats');
         $fpdf->cell(5,5,chr(52),1,1,'C');
         $fpdf->SetFont('Arial','',11);
         $fpdf->SetXY(17,42);
-        $fpdf->Cell(20,5,utf8_decode('Pasaporte'),1,0,'C');
-        //$fpdf->SetFont('ZapfDingbats');
+        $fpdf->Cell(20,5,'Pasaporte',0,0,'C');
         $fpdf->cell(5,5,'',1,0,'C');
         $fpdf->SetFont('Arial','',11);
-        $fpdf->SetXY(42,37);
+        $fpdf->SetXY(44,37);
         $fpdf->Cell(30,10,$cliente->dui,1,0,'C');
         
-        $fpdf->SetXY(72,40);
-        $fpdf->Cell(10,5,utf8_decode('NIT'),1,0,'C');
+        $fpdf->SetXY(74,40);
+        $fpdf->Cell(10,5,'NIT',0,0,'C');
         $fpdf->Cell(60,5,$cliente->nit,1,1,'C');
         
         $fpdf->SetXY(17,48);
-        $fpdf->Cell(20,5,'Masculino',1,0,'L');
+        $fpdf->Cell(20,5,'Masculino',0,0,'L');
         $fpdf->SetFont('ZapfDingbats');
         $fpdf->cell(5,5,chr(52),1,0,'C');
         $fpdf->SetFont('Arial','',11);
-        $fpdf->Cell(20,5,'Femenino',1,0,'L');
+        $fpdf->Cell(20,5,'Femenino',0,0,'L');
         $fpdf->SetFont('ZapfDingbats');
         $fpdf->cell(5,5,chr(52),1,0,'C');
         $fpdf->SetFont('Arial','',11);
-        $fpdf->Cell(30,5,'Soltero/a',1,0,'R');
+        $fpdf->Cell(30,5,'Soltero/a',0,0,'R');
         $fpdf->SetFont('ZapfDingbats');
         $fpdf->cell(5,5,chr(52),1,0,'C');
         $fpdf->SetFont('Arial','',11);
-        $fpdf->Cell(20,5,'Casado/a',1,0,'R');
+        $fpdf->Cell(20,5,'Casado/a',0,0,'R');
         $fpdf->SetFont('ZapfDingbats');
         $fpdf->cell(5,5,chr(52),1,0,'C');
         $fpdf->SetFont('Arial','',11);
-        $fpdf->Cell(20,5,'Viudo/a',1,0,'R');
+        $fpdf->Cell(20,5,'Viudo/a',0,0,'R');
         $fpdf->SetFont('ZapfDingbats');
         $fpdf->cell(5,5,chr(52),1,0,'C');
         $fpdf->SetFont('Arial','',11);
-        $fpdf->Cell(55,5,'Fecha de Nacimiento',1,2,'R');
+        $fpdf->Cell(55,5,'Fecha de Nacimiento',0,2,'R');
         $fpdf->Cell(20,5,'',0,0,'R');
         $fpdf->Cell(25,5,$cliente->fecha_nacimiento->format('d-m-Y'),1,0,'R');
-        
-        /*
-        $fpdf->SetFont('Arial','',11);
-
-        $fpdf->SetXY(15,42);
-        $fpdf->cell(40,10,utf8_decode('DUI: '.$cliente->dui));
-        $fpdf->SetXY(24,42);
-        $fpdf->cell(40,10,'______________');
-
-        $fpdf->SetXY(85,42);
-        $fpdf->cell(40,10,utf8_decode('NIT: '.$cliente->nit));
-        $fpdf->SetXY(93,42);
-        $fpdf->cell(40,10,'______________');
-
-        $fpdf->SetXY(153,42);
-        $fpdf->cell(40,10,utf8_decode('TEL: '.$cliente->telefono1));
-        $fpdf->SetXY(163,42);
-        $fpdf->cell(40,10,'_________________');
-
-        $fpdf->SetXY(15,48);
-        $fpdf->cell(40,10,utf8_decode('DIRRECCIÓN:'));
-        $fpdf->SetXY(44,50);
-        $fpdf->SetFont('Arial','',11);*/
         if($cliente->id_municipio!=0){
 
             $direccion = $cliente->dirreccion.', '.$cliente->get_municipio->nombre.', '.$cliente->get_municipio->get_departamento->nombre;
@@ -1367,7 +1352,7 @@ class ClientesController extends Controller
         $fpdf->SetFont('Arial','',11);
         $fpdf->SetXY(17,58);
         $fpdf->cell(135,5,utf8_decode('Dirección domicilio'),1,0);
-        $fpdf->cell(57,5,utf8_decode('Teléfonos'),1,1,'C');
+        $fpdf->cell(57,5,utf8_decode('Teléfonos'),0,1,'C');
         $fpdf->SetXY(17,63);
         if($cliente->id_municipio!=0){
 
@@ -1377,12 +1362,12 @@ class ClientesController extends Controller
         }
         $direccion = substr($direccion,0,60);
         $fpdf->cell(135,5,utf8_decode($direccion),1,0);
-        $fpdf->cell(20,5,'Fijo',1,0,'C');
-        $fpdf->cell(37,5,$cliente->telefono2,1,1,'L');
+        $fpdf->cell(20,5,'Fijo',0,0,'C');
+        $fpdf->cell(25,5,$cliente->telefono2,1,1,'L');
         $fpdf->SetXY(17,72);
         $fpdf->cell(135,5,utf8_decode('Dirección de trabajo'),1,0);
-        $fpdf->cell(20,5,'Personal',1,0,'C');
-        $fpdf->cell(37,5,$cliente->telefono1,1,0,'L');
+        $fpdf->cell(20,5,'Personal',0,0,'C');
+        $fpdf->cell(25,5,$cliente->telefono1,1,0,'L');
         $fpdf->SetXY(17,77);
         if($cliente->id_municipio!=0){
 
@@ -1399,12 +1384,12 @@ class ClientesController extends Controller
         //----------------SEGUNDO CUADRO------------------------------------------------
         $fpdf->SetXY(17,90);
         $fpdf->SetFont('Arial','',9);
-        $fpdf->cell(30,5,utf8_decode('Dirección de cobro'),1,0);
-        $fpdf->cell(35,5,utf8_decode('La misma de Domicilio'),1);
+        $fpdf->cell(30,5,utf8_decode('Dirección de cobro'),0,0);
+        $fpdf->cell(35,5,utf8_decode('La misma de Domicilio'),0);
         $fpdf->SetFont('ZapfDingbats');
         $fpdf->cell(5,5,chr(52),1,0,'C');
         $fpdf->SetFont('Arial','',9);
-        $fpdf->cell(35,5,utf8_decode('La misma de Trabajo'),1);
+        $fpdf->cell(35,5,utf8_decode('La misma de Trabajo'),0);
         $fpdf->SetFont('ZapfDingbats');
         $fpdf->cell(5,5,chr(52),1,0,'C');
 
@@ -1412,24 +1397,24 @@ class ClientesController extends Controller
         $fpdf->SetFont('Arial','',11);
         $fpdf->SetXY(17,96);
         $fpdf->cell(135,5,utf8_decode('Otra:'),1,0);
-        $fpdf->cell(57,5,utf8_decode('WhatsApp'),1,1,'C');
+        $fpdf->cell(57,5,utf8_decode('   WhatsApp'),0,1,'C');
         $fpdf->SetXY(17,101);
         $fpdf->cell(135,5,utf8_decode('Canton las Trancas lot el Pozo Ozatlan Usulutan'),1,0);
-        $fpdf->cell(20,5,'',1,0,'C');
-        $fpdf->cell(37,5,$cliente->telefono1,1,1,'L');
+        $fpdf->cell(20,5,'',0,0,'C');
+        $fpdf->cell(25,5,$cliente->telefono1,1,1,'L');
         $fpdf->SetXY(17,108);
-        $fpdf->cell(20,5,utf8_decode('Email:'),1,0);
+        $fpdf->cell(20,5,utf8_decode('Email:'),0,0);
         $fpdf->cell(115,5,utf8_decode(''),1,0);
-        $fpdf->cell(20,5,'',1,0,'C');
-        $fpdf->cell(37,5,'Zona',1,1,'L');
+        $fpdf->cell(20,5,'',0,0,'C');
+        $fpdf->cell(37,5,'   Zona',0,1,'L');
         $fpdf->SetFont('Arial','',10);
         $fpdf->SetXY(17,113);
-        $fpdf->Multicell(135,5,utf8_decode('El cliente autoriza la entrega de su factura en formato electrónico (ecofactura) por el siguiente medio: Email proporcionado por este formulario. Una copia de las condiciones de contratación serán enviadas por este mismo medio.'),1);
+        $fpdf->Multicell(135,5,utf8_decode('El cliente autoriza la entrega de su factura en formato electrónico (ecofactura) por el siguiente medio: Email proporcionado por este formulario. Una copia de las condiciones de contratación serán enviadas por este mismo medio.'),0);
         $fpdf->SetFont('Arial','',11);
-        $fpdf->SetXY(169,115);
-        $fpdf->cell(40,5,'Tamanique',1,0,'L');
+        $fpdf->SetXY(172,115);
+        $fpdf->cell(25,5,'Tamanique',1,0,'L');
         $fpdf->SetXY(17,130);
-        $fpdf->cell(35,5,'Credito Fiscal',1);        
+        $fpdf->cell(35,5,'Credito Fiscal',0);        
         $fpdf->SetFont('ZapfDingbats');
         if($cliente->tipo_documento==2){
             $fpdf->cell(5,5,chr(52),1,0,'C');
@@ -1439,7 +1424,7 @@ class ClientesController extends Controller
 
         }
         $fpdf->SetFont('Arial','',12);
-        $fpdf->cell(35,5,'Consumidor Final',1);
+        $fpdf->cell(35,5,'Consumidor Final',0);
         $fpdf->SetFont('ZapfDingbats');
         if($cliente->tipo_documento==1){
             $fpdf->cell(5,5,chr(52),1,0,'C');
@@ -1451,23 +1436,23 @@ class ClientesController extends Controller
 
         $fpdf->SetFont('Arial','',10);
         $fpdf->SetXY(19,139);
-        $fpdf->cell(80,5,utf8_decode('Persona Jurídica - Razón/Denominación'),1,0);
+        $fpdf->cell(67,5,utf8_decode('Persona Jurídica - Razón/Denominación'),0,0);
         $fpdf->cell(105,5,utf8_decode(''),1,1);
         $fpdf->SetXY(19,144);
-        $fpdf->cell(50,5,utf8_decode('Número de Registro'),1);
-        $fpdf->cell(25,5,$cliente->numero_registro,1,1);
+        $fpdf->cell(40,5,utf8_decode('Número de Registro'),0);
+        $fpdf->cell(40,5,$cliente->numero_registro,1,1);
         $fpdf->SetXY(19,149);
-        $fpdf->cell(40,5,utf8_decode('NIT de Comercio'),1);
+        $fpdf->cell(40,5,utf8_decode('NIT de Comercio'),0);
         $fpdf->cell(40,5,utf8_decode('7777-777777-777-7'),1,1);
         $fpdf->SetXY(19,157);
-        $fpdf->cell(40,5,utf8_decode('Giro'),1,0);
+        $fpdf->cell(40,5,utf8_decode('Giro'),0,0);
         $fpdf->cell(145,5,utf8_decode($cliente->giro),1,1);
         $fpdf->Rect(17, 137, 190 , 26, '');
         $fpdf->Rect(7, 88, 202 , 77, '');
         //----------------------------------------------------------------
         $fpdf->SetFont('Arial','',8);
         $fpdf->SetXY(7,167);
-        $fpdf->MultiCell(202,4,utf8_decode('Declaro que mi información personal es cierta y autorizo a las empresas a comprobar su autenticidad, previo a dar trámite a la solicitud de los servicios. Acepto que la documentación donde conste la información proporcionada para efectos de este contrato, será resguardada por la empresa. Doy fe de lo establecido en el presente formulario y anexos. Confirmo que he leído y entiendo el contrato y las condiciones de la contratación, las cuales fueron presentadas a mi persona por el personal de la empresa. Ratifico el contenido del mismo y firmo.'),1);
+        $fpdf->MultiCell(202,4,utf8_decode('Declaro que mi información personal es cierta y autorizo a las empresas a comprobar su autenticidad, previo a dar trámite a la solicitud de los servicios. Acepto que la documentación donde conste la información proporcionada para efectos de este contrato, será resguardada por la empresa. Doy fe de lo establecido en el presente formulario y anexos. Confirmo que he leído y entiendo el contrato y las condiciones de la contratación, las cuales fueron presentadas a mi persona por el personal de la empresa. Ratifico el contenido del mismo y firmo.'),0);
 
         $fpdf->SetFont('Arial','',9);
         $fpdf->SetXY(7,190);
@@ -1503,7 +1488,7 @@ class ClientesController extends Controller
         $fpdf->cell(35,3,utf8_decode('Meses'),1,0,'C');
         $fpdf->Rect(42, 207, 35 , 16, '');//cuadro plazo de contrato
         $fpdf->SetXY(79,210);
-        $fpdf->MultiCell(35,4,utf8_decode('Total de Servicios Mensuales Servicios Residenciales.'),1,'C');
+        $fpdf->MultiCell(35,4,utf8_decode('Total de Servicios Mensuales Servicios Residenciales.'),0,'C');
         $fpdf->Rect(77, 207, 39 , 16, '');//cuadro de servicios mensuales
         $fpdf->SetXY(116,220);
         $fpdf->cell(32,3,utf8_decode('(IVA incluido)'),1,0,'C');
@@ -1519,42 +1504,22 @@ class ClientesController extends Controller
 
         $fpdf->SetFont('Arial','B',10);
         $fpdf->SetXY(7,225);
-        $fpdf->cell(135,5,utf8_decode('PAGARE SIN PROTESTO'),1,0,'L');
-        $fpdf->cell(20,5,utf8_decode('POR US$'),1,0,'L');
+        $fpdf->cell(135,5,utf8_decode('PAGARE SIN PROTESTO'),0,0,'L');
+        $fpdf->cell(20,5,utf8_decode('POR US$'),0,0,'L');
         $fpdf->cell(40,5,$contrato_internet[0]->cuota_mensual*$contrato_internet[0]->periodo,1,1,'L');
         $fpdf->SetXY(7,230);
         $fpdf->SetFont('Arial','',8);
-        $fpdf->cell(195,5,utf8_decode('                                                                                                      (Ciudad),                             de                                                           de 2021'),1,1,'L');
+        $fpdf->cell(195,5,utf8_decode('                                                                                                      (Ciudad),                             de                                                           de 2021'),0,1,'L');
         $fpdf->SetXY(7,235);
-        $fpdf->cell(195,5,utf8_decode('de_______________________de 20 _______ la cantidad de _____________________________________ DÓLARES DE LOS ESTADOS UNIDOS DE        '),1,1,'L');        
+        $fpdf->cell(195,5,utf8_decode('de_______________________de 20 _______ la cantidad de _____________________________________ DÓLARES DE LOS ESTADOS UNIDOS DE        '),0,1,'L');        
         $fpdf->SetXY(7,240);
-        $fpdf->cell(195,5,utf8_decode('AMÉRICA, más el interés convencional del UNO PUNTO CERO CERO por ciento mensual, calculados a partir de la fecha de suscripción del presente'),1,1,'L');        
+        $fpdf->cell(195,5,utf8_decode('AMÉRICA, más el interés convencional del UNO PUNTO CERO CERO por ciento mensual, calculados a partir de la fecha de suscripción del presente'),0,1,'L');        
         $fpdf->SetXY(7,245);
-        $fpdf->cell(195,5,utf8_decode('documento, pagaré(mos) además a partir de esta última fecha, intereses moratorios sobre el saldo de capital de mora.'),1,1,'L');
+        $fpdf->cell(195,5,utf8_decode('documento, pagaré(mos) además a partir de esta última fecha, intereses moratorios sobre el saldo de capital de mora.'),0,1,'L');
         $fpdf->SetXY(7,254);
         $fpdf->SetFont('Arial','B',10);
-        $fpdf->cell(120,5,'Firma del Suscriptor:_________________________',1,0,'L');
-        $fpdf->cell(75,5,'Firma del Avalista:_____________________',1,1,'L');
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        /*
-        if($cliente->condicion_lugar==1){
-            $fpdf->cell(10,5,chr(52),1,1,'C');
-            
-        }else{
-            $fpdf->cell(10,5,'',1,1,'C');
-
-        }*/
-    
+        $fpdf->cell(120,5,'Firma del Suscriptor:_________________________',0,0,'L');
+        $fpdf->cell(75,5,'Firma del Avalista:_____________________',0,1,'L');
         /*$fpdf->SetXY(15,113);
         if(isset($contrato_internet[0]->contrato_vence)==1){
             $contrato_vence = $contrato_internet[0]->contrato_vence->format('d/m/Y');
@@ -1570,14 +1535,8 @@ class ClientesController extends Controller
             $fpdf->cell(10,5,'',1,1,'C');
 
         }*/
-
-        
-    
         //--------------------------------------------------------------------------------------------------------------------
         //--------------------------------------------------------------------------------------------------------------------
-         
-
-       
         $fpdf->AliasNbPages();
         $fpdf->AddPage();
         // Logo

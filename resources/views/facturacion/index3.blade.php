@@ -72,7 +72,7 @@
                                 <div class="row">
                                     <div class="col-lg-4">
                                         <span class="logo-lg">
-                                            <img src="{{ URL::asset('assets/images/LOGO.png')}}" alt="" height="70">
+                                            <img src="{{ URL::asset('assets/images/logo.png')}}" alt="" height="70">
                                         </span>
                                     </div>
                                     <div class="col-lg-5">
